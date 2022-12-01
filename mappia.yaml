@@ -1,0 +1,34 @@
+# Azure specific settings for mappia helm chart
+magento:
+  persistentVolumeClaims:
+    media:
+      storageClassName: azurefile-csi
+    var:
+      storageClassName: azurefile-csi
+  envFrom:
+    - secretRef:
+        name: magento-secret
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "500Mi"
+    limits:
+      cpu: "1000m"
+      memory: "1.5Gi"
+      
+api:
+  ingress:
+    annotations:
+      kubernetes.io/ingress.class: "nginx"
+  ingressRoot:
+    enabled: true
+    annotations:
+      nginx.ingress.kubernetes.io/proxy-buffer-size: 256k
+      kubernetes.io/ingress.class: "nginx"
+    service:
+      port: 80
+
+admin:
+  ingress:
+    annotations:
+      kubernetes.io/ingress.class: "nginx"

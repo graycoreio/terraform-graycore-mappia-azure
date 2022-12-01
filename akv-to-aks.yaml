@@ -1,0 +1,9 @@
+secretProvider:
+  secretObjects:
+  - data:
+    - key: MAGENTO_SHAREDCACHE_PASSWORD                           # data field to populate
+      objectName: magento-shared-cache-pwd                        # name of the mounted content to sync; this could be the object name or the object alias
+    - key: MAGENTO_ENCRYPTION_KEY
+      objectName: magento-encryption-key
+    secretName: magento-secret                     # name of the Kubernetes secret object
+    type: Opaque
