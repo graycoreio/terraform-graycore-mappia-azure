@@ -54,7 +54,7 @@ To use this terraform module [set the variables safely](https://developer.hashic
 mkdir -p my-terraform-project
 touch \
   my-terraform-project/main.tf \
-  my-terraform-project/variables.tf
+  my-terraform-project/variables.tf \
   my-terraform-project/outputs.tf
 ```
 
