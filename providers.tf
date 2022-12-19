@@ -9,6 +9,12 @@ provider "azurerm" {
 }
 
 provider "helm" {
+  registry {
+    url = "oci://mappia.azurecr.io"
+    password = var.helm_pwd
+    username = var.helm_user
+  }
+  
   kubernetes {
     host = module.mappia_aks.kube_config_host
 

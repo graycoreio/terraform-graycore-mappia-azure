@@ -18,7 +18,8 @@ module "mappia_aks" {
 
 resource "helm_release" "mappia_kv_to_aks" {
   name             = "mappia-kv-to-aks"
-  chart            = "../../akvaks"
+  repository       = "oci://mappia.azurecr.io/helm"
+  chart            = "akvaks"
   namespace        = "default"
   create_namespace = true
   wait             = true

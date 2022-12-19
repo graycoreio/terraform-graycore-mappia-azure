@@ -39,5 +39,17 @@ variable "secrets" {
   type        = map(string)
   description = "Map of secrets that will be maitained by terraform e.g {\"my-secret\" = \"my-secret-value\" }"
   sensitive   = true
-  default = {}
+  default     = {}
+}
+
+variable "helm_user" {
+  type        = string
+  description = "Mappia's helm registry user"
+  sensitive   = true
+}
+
+variable "helm_pwd" {
+  type        = string
+  description = "Mappia's helm registry password"
+  sensitive   = true
 }
