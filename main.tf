@@ -20,6 +20,7 @@ resource "helm_release" "mappia_kv_to_aks" {
   name             = "mappia-kv-to-aks"
   repository       = "oci://mappia.azurecr.io/helm"
   chart            = "akvaks"
+  version          = "0.0.1"
   namespace        = "default"
   create_namespace = true
   wait             = true
