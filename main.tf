@@ -37,6 +37,10 @@ resource "helm_release" "mappia_kv_to_aks" {
     "${file("${path.module}/akv-to-aks.yaml")}"
   ]
 
+  depends_on = [
+    module.mappia_aks.aks_id
+  ]
+
   set {
     name  = "keyvaultName"
     value = module.keyvault.mappia_kv_name
@@ -57,6 +61,10 @@ resource "helm_release" "ingress" {
   chart            = "ingress-nginx"
   namespace        = "ingress-nginx"
   create_namespace = true
+
+  depends_on = [
+    module.mappia_aks.aks_id
+  ]
 
   set {
     type  = "string"
