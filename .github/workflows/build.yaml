@@ -1,0 +1,36 @@
+name: terraform-ci
+
+on:
+  pull_request:
+    branches: [main]
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch: {}
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        ref: ${{ github.event.pull_request.head.sha }}
+
+    - uses: hashicorp/setup-terraform@v2
+    
+    - name: Lint
+      run: terraform fmt -check -recursive
+
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        ref: ${{ github.event.pull_request.head.sha }}
+        
+    - uses: hashicorp/setup-terraform@v2
+      with:
+        cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
+    - run: terraform init
+
+    - name: Validate module
+      run: terraform validate -no-color

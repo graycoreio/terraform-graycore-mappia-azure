@@ -62,14 +62,17 @@ In your `main.tf`, add the following content:
 
 ```terraform
 module "my-terraform-project" {
-  source = "../azure"
+  source  = "app.terraform.io/graycore/mappia-azure/graycore"
+  version = "0.0.5"
 
-  resource_group_name = "demoResourceGroup"
-  sp_id = var.mappia_sp_id
-  sp_object_id = var.mappia_sp_object_id
-  sp_secret = var.mappia_sp_password
-  subscription_id =  var.mappia_subscription_id
-  sp_tenant_id = var.mappia_sp_tenant_id
+  resource_group_name = "mappia"
+  sp_id               = var.mappia_sp_id
+  sp_object_id        = var.mappia_sp_object_id
+  sp_secret           = var.mappia_sp_password
+  subscription_id     = var.mappia_subscription_id
+  sp_tenant_id        = var.mappia_sp_tenant_id
+  helm_user           = var.mappia_helm_user
+  helm_pwd            = var.mappia_helm_pwd
 }
 ```
 
