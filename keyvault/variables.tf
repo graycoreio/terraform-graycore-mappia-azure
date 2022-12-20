@@ -26,7 +26,23 @@ variable "aks_identity_id" {
 variable "kv_sku_name" {
   type = string
   description = "The Name of the SKU used for this Key Vault. Possible values are 'standard' and 'premium'"
-  default = "standard"
+}
+
+variable "kv_name" {
+  type = string
+  description = "Keyvault resource name"
+}
+
+variable "encryption_key" {
+  type = string
+  description = "Magento encryption key"
+  sensitive = true 
+}
+
+variable "shared_cache_pwd" {
+  type = string
+  description = "Magento shared cache password"
+  sensitive = true 
 }
 
 variable "secrets" {

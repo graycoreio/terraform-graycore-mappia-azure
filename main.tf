@@ -1,19 +1,28 @@
 module "keyvault" {
   source = "./keyvault"
 
-  rg_name         = data.azurerm_resource_group.mappia_rg.name
-  rg_location     = data.azurerm_resource_group.mappia_rg.location
-  tenant_id       = var.sp_tenant_id
-  sp_object_id    = var.sp_object_id
-  aks_identity_id = module.mappia_aks.secret_provider_identity.object_id
-  secrets         = var.secrets
+  rg_name          = data.azurerm_resource_group.mappia_rg.name
+  rg_location      = coalesce(var.location, data.azurerm_resource_group.mappia_rg.location)
+  tenant_id        = var.sp_tenant_id
+  sp_object_id     = var.sp_object_id
+  aks_identity_id  = module.mappia_aks.secret_provider_identity.object_id
+  kv_sku_name      = var.kv_sku_name
+  kv_name          = var.kv_name
+  encryption_key   = var.encryption_key
+  shared_cache_pwd = var.shared_cache_pwd
+  secrets          = var.secrets
 }
 
 module "mappia_aks" {
   source = "./aks"
 
-  rg_name     = data.azurerm_resource_group.mappia_rg.name
-  rg_location = data.azurerm_resource_group.mappia_rg.location
+  rg_name            = data.azurerm_resource_group.mappia_rg.name
+  location           = coalesce(var.location, data.azurerm_resource_group.mappia_rg.location)
+  name               = var.aks_name
+  kubernetes_version = var.kubernetes_version
+  dns_prefix         = var.dns_prefix
+  default_node_pool  = var.default_node_pool
+  extra_node_pools   = var.extra_node_pools
 }
 
 resource "helm_release" "mappia_kv_to_aks" {

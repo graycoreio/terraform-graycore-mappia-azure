@@ -14,7 +14,7 @@ resource "random_password" "shared_cache_pwd" {
 
 # Key-Vault
 resource "azurerm_key_vault" "mappia-kv" {
-  name                = random_pet.kv_name.id
+  name                = coalesce(var.kv_name, random_pet.kv_name.id)
   location            = var.rg_location
   resource_group_name = var.rg_name
   sku_name            = var.kv_sku_name
@@ -54,7 +54,7 @@ resource "azurerm_key_vault_secret" "mappia-secrets" {
 resource "azurerm_key_vault_secret" "magento_encryption_key" {
   key_vault_id = azurerm_key_vault.mappia-kv.id
   name         = "magento-encryption-key"
-  value        = random_password.mage_encryption_key.result
+  value        = coalesce(var.encryption_key, random_password.mage_encryption_key.result)
 
   depends_on = [
     azurerm_key_vault_access_policy.sp-access-policy
@@ -64,7 +64,7 @@ resource "azurerm_key_vault_secret" "magento_encryption_key" {
 resource "azurerm_key_vault_secret" "magento_shared_cache_pwd" {
   key_vault_id = azurerm_key_vault.mappia-kv.id
   name         = "magento-shared-cache-pwd"
-  value        = random_password.shared_cache_pwd.result
+  value        = coalesce(var.shared_cache_pwd, random_password.shared_cache_pwd.result)
 
   depends_on = [
     azurerm_key_vault_access_policy.sp-access-policy

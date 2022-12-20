@@ -3,27 +3,24 @@ variable "rg_name" {
   description = "Azure resource group name"
 }
 
-variable "rg_location" {
+variable "location" {
   type        = string
-  description = "Azure resource group location"
+  description = "Location to create the kubernetes cluster"
 }
 
 variable "name" {
   type        = string
   description = "AKS resource name"
-  default     = "mappia-aks"
 }
 
 variable "kubernetes_version" {
-  type = string
+  type        = string
   description = "Kubernetes version"
-  default = "1.23"
 }
 
 variable "dns_prefix" {
   type        = string
   description = "AKS resource name"
-  default     = "mappia-aks-dns"
 }
 
 variable "default_node_pool" {
@@ -31,15 +28,11 @@ variable "default_node_pool" {
     max_count = number
     min_count = number
     vm_size   = string
+    name      = string
+    set_max_map_count = bool
   })
 
   description = "AKS default node pool configuration"
-
-  default = {
-    max_count = 5
-    min_count = 1
-    vm_size   = "standard_b2s"
-  }
 }
 
 variable "extra_node_pools" {
@@ -48,6 +41,7 @@ variable "extra_node_pools" {
     min_count = number
     vm_size   = string
     name      = string
+    set_max_map_count = bool
   }))
 
   description = "AKS extra node pool configuration"
