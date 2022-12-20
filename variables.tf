@@ -7,7 +7,7 @@ variable "resource_group_name" {
 variable "location" {
   type        = string
   description = "Location to create the resources. If unset, resource group location will be used"
-  default = ""
+  default     = ""
 }
 
 
@@ -55,29 +55,29 @@ variable "helm_release_name" {
 }
 
 variable "kv_sku_name" {
-  type = string
+  type        = string
   description = "The Name of the SKU used for this Key Vault. Possible values are 'standard' and 'premium'"
-  default = "standard"
+  default     = "standard"
 }
 
 variable "kv_name" {
-  type = string
+  type        = string
   description = "[Optional] Keyvault resource name. If left empty a random name will be chosen"
-  default = ""
+  default     = ""
 }
 
 variable "encryption_key" {
-  type = string
+  type        = string
   description = "Magento encryption key"
-  sensitive = true 
-  default = ""
+  sensitive   = true
+  default     = ""
 }
 
 variable "shared_cache_pwd" {
-  type = string
+  type        = string
   description = "Magento shared cache password"
-  sensitive = true
-  default = ""
+  sensitive   = true
+  default     = ""
 }
 
 variable "secrets" {
@@ -89,49 +89,49 @@ variable "secrets" {
 
 
 variable "aks_name" {
-  type = string
+  type        = string
   description = "Azure kubernetes system (AKS) resource name"
-  default = "mappia-aks"
+  default     = "mappia-aks"
 }
 
 variable "kubernetes_version" {
-  type = string
+  type        = string
   description = "AKS kubernetes version"
-  default = "1.23"
+  default     = "1.23"
 }
 
 variable "dns_prefix" {
-  type = string
+  type        = string
   description = "DNS prefix specified when creating the managed cluster"
-  default = "mappia-aks-dns"
+  default     = "mappia-aks-dns"
 }
 
 variable "default_node_pool" {
   type = object({
-    max_count = number
-    min_count = number
-    vm_size   = string
-    name      = string
+    max_count         = number
+    min_count         = number
+    vm_size           = string
+    name              = string
     set_max_map_count = bool
   })
 
   description = "AKS default node pool configuration"
 
   default = {
-    name      = "agentpool"
-    max_count = 5
-    min_count = 1
-    vm_size   = "Standard_B2s"
+    name              = "agentpool"
+    max_count         = 5
+    min_count         = 1
+    vm_size           = "Standard_B2s"
     set_max_map_count = true
   }
 }
 
 variable "extra_node_pools" {
   type = list(object({
-    max_count = number
-    min_count = number
-    vm_size   = string
-    name      = string
+    max_count         = number
+    min_count         = number
+    vm_size           = string
+    name              = string
     set_max_map_count = bool
   }))
 

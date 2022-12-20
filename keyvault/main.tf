@@ -3,13 +3,13 @@ resource "random_pet" "kv_name" {
 }
 
 resource "random_password" "mage_encryption_key" {
-  length           = 32
-  special          = false
+  length  = 32
+  special = false
 }
 
 resource "random_password" "shared_cache_pwd" {
-  length           = 16
-  special          = false
+  length  = 16
+  special = false
 }
 
 # Key-Vault

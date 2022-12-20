@@ -25,10 +25,10 @@ variable "dns_prefix" {
 
 variable "default_node_pool" {
   type = object({
-    max_count = number
-    min_count = number
-    vm_size   = string
-    name      = string
+    max_count         = number
+    min_count         = number
+    vm_size           = string
+    name              = string
     set_max_map_count = bool
   })
 
@@ -37,10 +37,10 @@ variable "default_node_pool" {
 
 variable "extra_node_pools" {
   type = list(object({
-    max_count = number
-    min_count = number
-    vm_size   = string
-    name      = string
+    max_count         = number
+    min_count         = number
+    vm_size           = string
+    name              = string
     set_max_map_count = bool
   }))
 
