@@ -94,7 +94,8 @@ module "mappia" {
   set_values = {
     "installer.enabled" = true
   }
-  values = [
-    "${file("${path.module}/mappia.yaml")}"
-  ]
+  values = compact([
+    "${file("${path.module}/mappia.yaml")}",
+    fileexists(var.helm_mappia_values) ? "${file(var.helm_mappia_values)}" : ""
+  ])
 }

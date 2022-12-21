@@ -175,3 +175,9 @@ variable "helm_ingress_values" {
   description = "Ingress chart extra configuration file path"
   default     = "no-file"
 }
+
+variable "helm_mappia_values" {
+  type        = string
+  description = "Mappia chart extra configuration file path"
+  default     = "no-file"
+}
