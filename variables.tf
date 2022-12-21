@@ -139,3 +139,21 @@ variable "extra_node_pools" {
 
   default = []
 }
+
+variable "public_ip_name" {
+  type        = string
+  description = "Public Ip resource name"
+  default     = "mappia-public-ip"
+}
+
+variable "domain_name_label" {
+  type        = string
+  description = "(Optional) Label for the Domain Name. Will be used to make up the FQDN. If a domain name label is specified, an A DNS record is created for the public IP in the Microsoft Azure DNS system."
+  default     = ""
+}
+
+variable "public_ip_zones" {
+  type        = list(string)
+  description = "Public Ip zones"
+  default     = []
+}

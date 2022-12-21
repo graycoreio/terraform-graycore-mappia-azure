@@ -23,6 +23,9 @@ module "mappia_aks" {
   dns_prefix         = var.dns_prefix
   default_node_pool  = var.default_node_pool
   extra_node_pools   = var.extra_node_pools
+  public_ip_name     = var.public_ip_name
+  domain_name_label  = var.domain_name_label
+  public_ip_zones    = var.public_ip_zones
 }
 
 resource "helm_release" "mappia_kv_to_aks" {

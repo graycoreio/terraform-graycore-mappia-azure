@@ -56,13 +56,14 @@ resource "azurerm_kubernetes_cluster_node_pool" "mappia_aks_extra_nodes" {
 }
 
 resource "azurerm_public_ip" "mappia_ip" {
-  name                = "mappia-public-ip"
+  name                = var.public_ip_name
   location            = var.location
   resource_group_name = var.rg_name
   allocation_method   = "Static"
   ip_version          = "IPv4"
   sku                 = "Standard"
-  domain_name_label   = "mappia"
+  domain_name_label   = coalesce(var.domain_name_label, local.random_domain_name)
+  zones               = var.public_ip_zones
 }
 
 
@@ -70,4 +71,12 @@ resource "azurerm_role_assignment" "aks_identity_ip_role_permission" {
   scope                = azurerm_public_ip.mappia_ip.id
   role_definition_name = "Network Contributor"
   principal_id         = azurerm_kubernetes_cluster.mappia_aks.identity[0].principal_id
+}
+
+resource "random_pet" "domain_name" {
+  count = var.domain_name_label == "" ? 1 : 0
+}
+
+locals {
+  random_domain_name = one(random_pet.domain_name[*].id)
 }

@@ -48,3 +48,18 @@ variable "extra_node_pools" {
 
   default = []
 }
+
+variable "public_ip_name" {
+  type        = string
+  description = "Public Ip resource name"
+}
+
+variable "domain_name_label" {
+  type        = string
+  description = "Public Ip domain name label"
+}
+
+variable "public_ip_zones" {
+  type        = list(string)
+  description = "Public Ip zones"
+}
