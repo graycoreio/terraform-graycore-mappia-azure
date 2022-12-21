@@ -45,7 +45,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "mappia_aks_extra_nodes" {
   min_count             = var.extra_node_pools[count.index].min_count
 
   dynamic "linux_os_config" {
-    for_each = var.default_node_pool.set_max_map_count ? ["this"] : []
+    for_each = var.extra_node_pools[count.index].set_max_map_count ? ["this"] : []
     content {
       sysctl_config {
         # opensearch required configuration
