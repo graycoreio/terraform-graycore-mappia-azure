@@ -148,7 +148,7 @@ variable "public_ip_name" {
 
 variable "domain_name_label" {
   type        = string
-  description = "(Optional) Label for the Domain Name. Will be used to make up the FQDN. If a domain name label is specified, an A DNS record is created for the public IP in the Microsoft Azure DNS system."
+  description = "Label for the Domain Name. Will be used to make up the FQDN. Random value will be used if this is not provided"
   default     = ""
 }
 
@@ -156,4 +156,22 @@ variable "public_ip_zones" {
   type        = list(string)
   description = "Public Ip zones"
   default     = []
+}
+
+variable "helm_ingress_name" {
+  type        = string
+  description = "Ingress chart name to be deployed"
+  default     = "mappia-nginx"
+}
+
+variable "helm_ingress_namespace" {
+  type        = string
+  description = "Kubernetes namespace to deploy the chart to"
+  default     = "ingress-nginx"
+}
+
+variable "helm_ingress_values" {
+  type        = string
+  description = "Ingress chart extra configuration file path"
+  default     = "no-file"
 }

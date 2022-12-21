@@ -59,10 +59,10 @@ resource "helm_release" "mappia_kv_to_aks" {
 }
 
 resource "helm_release" "ingress" {
-  name             = "mappia-nginx"
+  name             = var.helm_ingress_name
   repository       = "https://kubernetes.github.io/ingress-nginx/"
   chart            = "ingress-nginx"
-  namespace        = "ingress-nginx"
+  namespace        = var.helm_ingress_namespace
   create_namespace = true
 
   depends_on = [
@@ -79,6 +79,8 @@ resource "helm_release" "ingress" {
     name  = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/azure-load-balancer-resource-group"
     type  = "string"
   }
+
+  values = fileexists(var.helm_ingress_values) ? ["${file(var.helm_ingress_values)}"] : []
 }
 
 module "mappia" {
