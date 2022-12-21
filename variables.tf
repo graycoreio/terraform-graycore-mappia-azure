@@ -181,3 +181,9 @@ variable "helm_mappia_values" {
   description = "Mappia chart extra configuration file path"
   default     = "no-file"
 }
+
+variable "helm_akvaks_values" {
+  type        = string
+  description = "AKV to AKS chart extra configuration file path"
+  default     = "no-file"
+}

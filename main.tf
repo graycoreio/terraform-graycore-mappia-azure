@@ -36,9 +36,10 @@ resource "helm_release" "mappia_kv_to_aks" {
   namespace        = "default"
   create_namespace = true
   wait             = true
-  values = [
-    "${file("${path.module}/akv-to-aks.yaml")}"
-  ]
+  values = compact([
+    "${file("${path.module}/akv-to-aks.yaml")}",
+    fileexists(var.helm_akvaks_values) ? "${file(var.helm_akvaks_values)}" : ""
+  ])
 
   depends_on = [
     module.mappia_aks.aks_id
