@@ -91,12 +91,12 @@ module "mappia" {
     helm_release.ingress
   ]
 
-  host = module.mappia_aks.fqdn
-  name = var.helm_mappia_name
-  set_values = var.helm_mappia_set_values
+  host               = module.mappia_aks.fqdn
+  name               = var.helm_mappia_name
+  set_values         = var.helm_mappia_set_values
   use_default_config = var.helm_mappia_use_default_config
-  chart_version = var.helm_mappia_chart_version
-  
+  chart_version      = var.helm_mappia_chart_version
+
   values = compact([
     "${file("${path.module}/mappia.yaml")}",
     fileexists(var.helm_mappia_values) ? "${file(var.helm_mappia_values)}" : ""
