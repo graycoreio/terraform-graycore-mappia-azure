@@ -86,15 +86,16 @@ resource "helm_release" "ingress" {
 
 module "mappia" {
   source  = "app.terraform.io/graycore/mappia/graycore"
-  version = "0.0.1"
+  version = "0.0.2"
   depends_on = [
     helm_release.ingress
   ]
 
   host = module.mappia_aks.fqdn
-  set_values = {
-    "installer.enabled" = true
-  }
+  name = var.helm_mappia_name
+  set_values = var.helm_mappia_set_values
+  use_default_config = var.helm_mappia_use_default_config
+  
   values = compact([
     "${file("${path.module}/mappia.yaml")}",
     fileexists(var.helm_mappia_values) ? "${file(var.helm_mappia_values)}" : ""

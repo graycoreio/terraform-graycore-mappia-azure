@@ -176,10 +176,30 @@ variable "helm_ingress_values" {
   default     = "no-file"
 }
 
+variable "helm_mappia_name" {
+  type        = string
+  description = "Mappia chart name"
+  default     = "mappia"
+}
+
 variable "helm_mappia_values" {
   type        = string
   description = "Mappia chart extra configuration file path"
   default     = "no-file"
+}
+
+variable "helm_mappia_set_values" {
+  type        = map(string)
+  description = "Dict of custom values to be used as --set in helm command. These values will override the default set when keys collide"
+  default     = {
+    "installer.enabled" = true
+  }
+}
+
+variable "helm_mappia_use_default_config" {
+  type        = bool
+  description = "Use pre-defined ingress/magento host configurations for mappia chart"
+  default     = true
 }
 
 variable "helm_akvaks_values" {
