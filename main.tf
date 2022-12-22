@@ -95,6 +95,7 @@ module "mappia" {
   name = var.helm_mappia_name
   set_values = var.helm_mappia_set_values
   use_default_config = var.helm_mappia_use_default_config
+  chart_version = var.helm_mappia_chart_version
   
   values = compact([
     "${file("${path.module}/mappia.yaml")}",

@@ -202,6 +202,12 @@ variable "helm_mappia_use_default_config" {
   default     = true
 }
 
+variable "helm_mappia_chart_version" {
+  type        = string
+  description = "Mappia chart extra configuration file path"
+  default     = "0.1.9"
+}
+
 variable "helm_akvaks_values" {
   type        = string
   description = "AKV to AKS chart extra configuration file path"
