@@ -16,16 +16,17 @@ module "keyvault" {
 module "mappia_aks" {
   source = "./aks"
 
-  rg_name            = data.azurerm_resource_group.mappia_rg.name
-  location           = coalesce(var.location, data.azurerm_resource_group.mappia_rg.location)
-  name               = var.aks_name
-  kubernetes_version = var.kubernetes_version
-  dns_prefix         = var.dns_prefix
-  default_node_pool  = var.default_node_pool
-  extra_node_pools   = var.extra_node_pools
-  public_ip_name     = var.public_ip_name
-  domain_name_label  = var.domain_name_label
-  public_ip_zones    = var.public_ip_zones
+  rg_name                        = data.azurerm_resource_group.mappia_rg.name
+  location                       = coalesce(var.location, data.azurerm_resource_group.mappia_rg.location)
+  name                           = var.aks_name
+  kubernetes_version             = var.kubernetes_version
+  dns_prefix                     = var.dns_prefix
+  default_node_pool              = var.default_node_pool
+  extra_node_pools               = var.extra_node_pools
+  public_ip_name                 = var.public_ip_name
+  domain_name_label              = var.domain_name_label
+  public_ip_zones                = var.public_ip_zones
+  oms_log_analytics_workspace_id = var.oms_log_analytics_workspace_id
 }
 
 resource "helm_release" "mappia_kv_to_aks" {

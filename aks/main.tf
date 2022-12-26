@@ -6,6 +6,13 @@ resource "azurerm_kubernetes_cluster" "mappia_aks" {
   kubernetes_version  = var.kubernetes_version
   oidc_issuer_enabled = true
 
+  dynamic "oms_agent" {
+    for_each = var.oms_log_analytics_workspace_id != "" ? ["this"] : []
+    content {
+      log_analytics_workspace_id = var.oms_log_analytics_workspace_id
+    }
+  }
+
   key_vault_secrets_provider {
     secret_rotation_enabled = true
   }
@@ -21,6 +28,7 @@ resource "azurerm_kubernetes_cluster" "mappia_aks" {
     enable_auto_scaling = true
     max_count           = var.default_node_pool.max_count
     min_count           = var.default_node_pool.min_count
+    zones               = var.default_node_pool.zones
 
     dynamic "linux_os_config" {
       for_each = var.default_node_pool.set_max_map_count ? ["this"] : []
@@ -43,6 +51,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "mappia_aks_extra_nodes" {
   enable_auto_scaling   = true
   max_count             = var.extra_node_pools[count.index].max_count
   min_count             = var.extra_node_pools[count.index].min_count
+  zones                 = var.extra_node_pools[count.index].zones
 
   dynamic "linux_os_config" {
     for_each = var.extra_node_pools[count.index].set_max_map_count ? ["this"] : []

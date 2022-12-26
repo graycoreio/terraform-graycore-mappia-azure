@@ -30,6 +30,7 @@ variable "default_node_pool" {
     vm_size           = string
     name              = string
     set_max_map_count = bool
+    zones             = optional(list(string))
   })
 
   description = "AKS default node pool configuration"
@@ -42,6 +43,7 @@ variable "extra_node_pools" {
     vm_size           = string
     name              = string
     set_max_map_count = bool
+    zones             = optional(list(string))
   }))
 
   description = "AKS extra node pool configuration"
@@ -62,4 +64,9 @@ variable "domain_name_label" {
 variable "public_ip_zones" {
   type        = list(string)
   description = "Public Ip zones"
+}
+
+variable "oms_log_analytics_workspace_id" {
+  type        = string
+  description = "The ID of the Log Analytics Workspace which the OMS Agent should send data to."
 }
