@@ -16,10 +16,10 @@ provider "helm" {
   }
 
   kubernetes {
-    host = module.mappia_aks.kube_config_host
+    host = data.azurerm_kubernetes_cluster.mappia_aks.kube_config.0.host
 
-    client_certificate     = base64decode(module.mappia_aks.kube_config_client_cert)
-    client_key             = base64decode(module.mappia_aks.kube_config_client_key)
-    cluster_ca_certificate = base64decode(module.mappia_aks.kube_config_ca_cert)
+    client_certificate     = base64decode(data.azurerm_kubernetes_cluster.mappia_aks.kube_config.0.client_certificate)
+    client_key             = base64decode(data.azurerm_kubernetes_cluster.mappia_aks.kube_config.0.client_key)
+    cluster_ca_certificate = base64decode(data.azurerm_kubernetes_cluster.mappia_aks.kube_config.0.cluster_ca_certificate)
   }
 }

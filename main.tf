@@ -1,32 +1,20 @@
+locals {
+  location = coalesce(var.location, data.azurerm_resource_group.mappia_rg.location)
+}
+
 module "keyvault" {
   source = "./keyvault"
 
   rg_name          = data.azurerm_resource_group.mappia_rg.name
-  rg_location      = coalesce(var.location, data.azurerm_resource_group.mappia_rg.location)
+  rg_location      = local.location
   tenant_id        = var.sp_tenant_id
   sp_object_id     = var.sp_object_id
-  aks_identity_id  = module.mappia_aks.secret_provider_identity.object_id
+  aks_identity_id  = data.azurerm_kubernetes_cluster.mappia_aks.key_vault_secrets_provider[0].secret_identity[0].client_id
   kv_sku_name      = var.kv_sku_name
   kv_name          = var.kv_name
   encryption_key   = var.encryption_key
   shared_cache_pwd = var.shared_cache_pwd
   secrets          = var.secrets
-}
-
-module "mappia_aks" {
-  source = "./aks"
-
-  rg_name                        = data.azurerm_resource_group.mappia_rg.name
-  location                       = coalesce(var.location, data.azurerm_resource_group.mappia_rg.location)
-  name                           = var.aks_name
-  kubernetes_version             = var.kubernetes_version
-  dns_prefix                     = var.dns_prefix
-  default_node_pool              = var.default_node_pool
-  extra_node_pools               = var.extra_node_pools
-  public_ip_name                 = var.public_ip_name
-  domain_name_label              = var.domain_name_label
-  public_ip_zones                = var.public_ip_zones
-  oms_log_analytics_workspace_id = var.oms_log_analytics_workspace_id
 }
 
 resource "helm_release" "mappia_kv_to_aks" {
@@ -43,7 +31,7 @@ resource "helm_release" "mappia_kv_to_aks" {
   ])
 
   depends_on = [
-    module.mappia_aks.aks_id
+    azurerm_kubernetes_cluster.mappia_aks
   ]
 
   set {
@@ -56,7 +44,7 @@ resource "helm_release" "mappia_kv_to_aks" {
   }
   set {
     name  = "secretProvider.userAssignedIdentityID"
-    value = module.mappia_aks.secret_provider_identity.client_id
+    value = data.azurerm_kubernetes_cluster.mappia_aks.key_vault_secrets_provider[0].secret_identity[0].client_id
   }
 }
 
@@ -68,13 +56,14 @@ resource "helm_release" "ingress" {
   create_namespace = true
 
   depends_on = [
-    module.mappia_aks.aks_id
+    azurerm_kubernetes_cluster.mappia_aks,
+    azurerm_role_assignment.aks_identity_ip_role_permission
   ]
 
   set {
     type  = "string"
     name  = "controller.service.loadBalancerIP"
-    value = module.mappia_aks.public_ip_address
+    value = azurerm_public_ip.mappia_ip.ip_address
   }
   set {
     value = data.azurerm_resource_group.mappia_rg.name
@@ -92,7 +81,7 @@ module "mappia" {
     helm_release.ingress
   ]
 
-  host               = module.mappia_aks.fqdn
+  host               = azurerm_public_ip.mappia_ip.fqdn
   name               = var.helm_mappia_name
   set_values         = var.helm_mappia_set_values
   use_default_config = var.helm_mappia_use_default_config
