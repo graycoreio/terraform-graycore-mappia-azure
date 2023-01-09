@@ -18,10 +18,10 @@ resource "random_password" "shared_cache_pwd" {
 # Key-Vault
 resource "azurerm_key_vault" "mappia-kv" {
   name                = coalesce(var.kv_name, local.random_kv_name)
-  location            = var.rg_location
-  resource_group_name = var.rg_name
+  location            = local.location
+  resource_group_name = var.resource_group_name
   sku_name            = var.kv_sku_name
-  tenant_id           = var.tenant_id
+  tenant_id           = var.sp_tenant_id
 
   enabled_for_template_deployment = true
 }
@@ -29,15 +29,15 @@ resource "azurerm_key_vault" "mappia-kv" {
 resource "azurerm_key_vault_access_policy" "sp-access-policy" {
   object_id    = var.sp_object_id
   key_vault_id = azurerm_key_vault.mappia-kv.id
-  tenant_id    = var.tenant_id
+  tenant_id    = var.sp_tenant_id
 
   secret_permissions = ["Get", "Set", "Delete", "Purge"]
 }
 
 resource "azurerm_key_vault_access_policy" "aks-access-policy" {
-  object_id    = var.aks_identity_id
+  object_id    = data.azurerm_kubernetes_cluster.mappia_aks.key_vault_secrets_provider[0].secret_identity[0].client_id
   key_vault_id = azurerm_key_vault.mappia-kv.id
-  tenant_id    = var.tenant_id
+  tenant_id    = var.sp_tenant_id
 
   secret_permissions = ["Get"]
 }

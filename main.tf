@@ -2,21 +2,6 @@ locals {
   location = coalesce(var.location, data.azurerm_resource_group.mappia_rg.location)
 }
 
-module "keyvault" {
-  source = "./keyvault"
-
-  rg_name          = data.azurerm_resource_group.mappia_rg.name
-  rg_location      = local.location
-  tenant_id        = var.sp_tenant_id
-  sp_object_id     = var.sp_object_id
-  aks_identity_id  = data.azurerm_kubernetes_cluster.mappia_aks.key_vault_secrets_provider[0].secret_identity[0].client_id
-  kv_sku_name      = var.kv_sku_name
-  kv_name          = var.kv_name
-  encryption_key   = var.encryption_key
-  shared_cache_pwd = var.shared_cache_pwd
-  secrets          = var.secrets
-}
-
 resource "helm_release" "mappia_kv_to_aks" {
   name             = "mappia-kv-to-aks"
   repository       = "oci://mappia.azurecr.io/helm"
@@ -36,7 +21,7 @@ resource "helm_release" "mappia_kv_to_aks" {
 
   set {
     name  = "keyvaultName"
-    value = module.keyvault.mappia_kv_name
+    value = azurerm_key_vault.mappia-kv.name
   }
   set {
     name  = "tenantId"

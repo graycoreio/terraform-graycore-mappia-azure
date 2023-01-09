@@ -10,7 +10,6 @@ variable "location" {
   default     = ""
 }
 
-
 variable "sp_id" {
   type        = string
   description = "Service principal client Id"
