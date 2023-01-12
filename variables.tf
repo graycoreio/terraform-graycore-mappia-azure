@@ -126,7 +126,7 @@ variable "default_node_pool" {
   default = {
     name              = "agentpool"
     max_count         = 5
-    min_count         = 1
+    min_count         = 4
     vm_size           = "Standard_B2s"
     set_max_map_count = true
   }
