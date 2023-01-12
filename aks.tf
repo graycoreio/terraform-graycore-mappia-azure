@@ -1,8 +1,21 @@
+resource "random_pet" "aks_name" {
+  count = var.aks_name == "" ? 1 : 0
+}
+
+resource "random_pet" "dns_prefix" {
+  count = var.dns_prefix == "" ? 1 : 0
+}
+
+locals {
+  random_aks_name   = one(random_pet.aks_name[*].id)
+  random_dns_prefix = one(random_pet.dns_prefix[*].id)
+}
+
 resource "azurerm_kubernetes_cluster" "mappia_aks" {
-  name                = var.aks_name
+  name                = coalesce(var.aks_name, local.random_aks_name)
   location            = local.location
   resource_group_name = var.resource_group_name
-  dns_prefix          = var.dns_prefix
+  dns_prefix          = coalesce(var.dns_prefix, local.random_dns_prefix)
   kubernetes_version  = var.kubernetes_version
   oidc_issuer_enabled = true
 

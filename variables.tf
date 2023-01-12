@@ -90,7 +90,7 @@ variable "secrets" {
 variable "aks_name" {
   type        = string
   description = "Azure kubernetes system (AKS) resource name"
-  default     = "mappia-aks"
+  default     = ""
 }
 
 variable "kubernetes_version" {
@@ -102,7 +102,7 @@ variable "kubernetes_version" {
 variable "dns_prefix" {
   type        = string
   description = "DNS prefix specified when creating the managed cluster"
-  default     = "mappia-aks-dns"
+  default     = ""
 }
 
 variable "oms_log_analytics_workspace_id" {
