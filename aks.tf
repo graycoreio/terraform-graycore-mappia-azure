@@ -95,6 +95,53 @@ resource "azurerm_role_assignment" "aks_identity_ip_role_permission" {
   principal_id         = azurerm_kubernetes_cluster.mappia_aks.identity[0].principal_id
 }
 
+resource "kubernetes_storage_class" "mappia_writable" {
+  depends_on = [
+    azurerm_kubernetes_cluster.mappia_aks
+  ]
+  metadata {
+    name = "azurefile-csi-web-writable"
+  }
+  storage_provisioner = "file.csi.azure.com"
+  volume_binding_mode = "Immediate"
+  mount_options = [
+    "dir_mode=0777",
+    "file_mode=0777",
+    "gid=82",
+    "uid=82",
+    "mfsymlinks",
+    "cache=strict",
+    "nosharesock",
+  ]
+  parameters = {
+    skuName = "Standard_LRS"
+  }
+}
+
+resource "kubernetes_storage_class" "mappia_writable_premium" {
+  depends_on = [
+    azurerm_kubernetes_cluster.mappia_aks
+  ]
+
+  metadata {
+    name = "azurefile-premium-csi-web-writable"
+  }
+  storage_provisioner = "file.csi.azure.com"
+  volume_binding_mode = "Immediate"
+  mount_options = [
+    "dir_mode=0777",
+    "file_mode=0777",
+    "gid=82",
+    "uid=82",
+    "mfsymlinks",
+    "cache=strict",
+    "nosharesock",
+  ]
+  parameters = {
+    skuName = "Premium_LRS"
+  }
+}
+
 resource "random_pet" "domain_name" {
   count = var.domain_name_label == "" ? 1 : 0
 }

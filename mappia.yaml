@@ -2,9 +2,9 @@
 magento:
   persistentVolumeClaims:
     media:
-      storageClassName: azurefile-csi
+      storageClassName: azurefile-premium-csi-web-writable
     var:
-      storageClassName: azurefile-csi
+      storageClassName: azurefile-csi-web-writable
   envFrom:
     - secretRef:
         name: magento-secret
