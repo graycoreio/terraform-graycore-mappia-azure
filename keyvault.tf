@@ -35,7 +35,7 @@ resource "azurerm_key_vault_access_policy" "sp-access-policy" {
 }
 
 resource "azurerm_key_vault_access_policy" "aks-access-policy" {
-  object_id    = data.azurerm_kubernetes_cluster.mappia_aks.key_vault_secrets_provider[0].secret_identity[0].object_id
+  object_id    = azurerm_kubernetes_cluster.mappia_aks.key_vault_secrets_provider[0].secret_identity[0].object_id
   key_vault_id = azurerm_key_vault.mappia-kv.id
   tenant_id    = var.sp_tenant_id
 

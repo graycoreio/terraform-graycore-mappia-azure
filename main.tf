@@ -29,7 +29,7 @@ resource "helm_release" "mappia_kv_to_aks" {
   }
   set {
     name  = "secretProvider.userAssignedIdentityID"
-    value = data.azurerm_kubernetes_cluster.mappia_aks.key_vault_secrets_provider[0].secret_identity[0].client_id
+    value = azurerm_kubernetes_cluster.mappia_aks.key_vault_secrets_provider[0].secret_identity[0].client_id
   }
 }
 
