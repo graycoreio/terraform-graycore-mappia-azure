@@ -21,7 +21,7 @@ Create a [Resource Group](https://learn.microsoft.com/en-us/azure/azure-resource
 
 ```bash
 RESOURCE_GROUP="demoResourceGroup"
-az group create --name $RESOURCE_GROUP --location westus
+az group create --name $RESOURCE_GROUP --location eastus2
 ```
 
 ### Service principal 
@@ -44,6 +44,11 @@ For security reasons Azure limits what kinds of resources you can create by defa
 
 ```bash
 az provider register --namespace Microsoft.KeyVault --wait
+az provider register --namespace Microsoft.ContainerService --wait
+az provider register --namespace Microsoft.Network --wait
+az provider register --namespace Microsoft.Compute --wait
+az provider register --namespace Microsoft.Insights --wait
+az provider register --namespace Microsoft.Storage --wait
 ```
 
 ## Using terraform
@@ -65,7 +70,8 @@ module "my-terraform-project" {
   source  = "app.terraform.io/graycore/mappia-azure/graycore"
   version = "0.0.5"
 
-  resource_group_name = "mappia"
+  resource_group_name = "demoResourceGroup"
+  location            = "eastus2"
   sp_id               = var.mappia_sp_id
   sp_object_id        = var.mappia_sp_object_id
   sp_secret           = var.mappia_sp_password
@@ -86,6 +92,11 @@ output "ip_address" {
 output "full_qualified_domain_name" {
   value = module.my-terraform-project.full_qualified_domain_name
 }
+
+output "kube_config_raw" {
+  value     = module.mappia-azure.kube_config_raw
+  sensitive = true
+}
 ```
 
 Now, let's set the appropriate variables for your terraform projects. You can set these via environment variables as below. [You can also use a `.tfvars` file.](https://developer.hashicorp.com/terraform/tutorials/configuration-language/sensitive-variables#set-values-with-a-tfvars-file)
@@ -96,6 +107,13 @@ export TF_VAR_mappia_sp_tenant_id="$(echo $SERVICE_PRINCIPAL | jq -r .tenant)"
 export TF_VAR_mappia_sp_password="$(echo $SERVICE_PRINCIPAL | jq -r .password)"
 export TF_VAR_mappia_sp_object_id="$(az ad sp show --id $TF_VAR_mappia_sp_id --query id -o tsv)"
 export TF_VAR_mappia_subscription_id="$(az account show --query id -o tsv)"
+```
+
+Also, add the helm variables:
+
+```bash
+export TF_VAR_mappia_helm_user="YOUR_HELM_USER"
+export TF_VAR_mappia_helm_pwd="YOUR_HELM_PWD"
 ```
 
 Finally, let's add the following content to our `variables.tf`:
@@ -125,8 +143,17 @@ variable "mappia_sp_tenant_id" {
   type        = string
   description = "Service principal tenant id"
 }
-```
 
+variable "mappia_helm_user" {
+  type        = string
+  description = "Helm mappia user name provided by graycore"
+}
+
+variable "mappia_helm_pwd" {
+  type        = string
+  description = "Helm mappia password (token) provided by graycore"
+}
+```
 
 Now, we can [init](https://developer.hashicorp.com/terraform/cli/commands/init) within `my-terraform-project`
 
@@ -163,4 +190,44 @@ You will be able to get the URL of your Magento 2 store by:
 
 ```
 terraform output full_qualified_domain_name
+```
+
+# Known Isues
+
+## "The VM size of Standard_B2s is not allowed in your subscription in location 'westus2'."
+
+This happens when the [VM size](https://learn.microsoft.com/en-us/azure/virtual-machines/sizes) you're trying to use is not available in the region you've selected.
+
+To change the VM size, select one from [Azure's list](https://azure.microsoft.com/en-ca/explore/global-infrastructure/products-by-region/?products=virtual-machines) for your region and override the `default_node_pool` at your mappia module.
+
+```terraform
+  default_node_pool =  {
+    name              = "agentpool"
+    max_count         = 5
+    min_count         = 4
+    vm_size           = "Standard_B2s"
+    set_max_map_count = true
+  }
+```
+
+## "BadRequest: Failed to perform resource identity operation."
+
+We're not sure of the root cause of this error when creating a new AKS, but setting the `aks_name` variable to another value can solve this issue
+
+## Terraform plan kubernetes error
+
+Changing some configuration for AKS can lead to the `terraform plan` error `Kubernetes cluster unreachable: invalid configuration: no configuration has been provided, try setting KUBERNETES_MASTER environment variable`. This happens because terraform assumes the cluster configurations will change and it doesn't know its future credentials. In reality, most of the times this credentials will not change (they only do when recreating AKS). 
+
+As a temporary solution you can set the helm provider to use a local kube config that has the configurations you need. Open the `.terraform/modules/mappia-azure/providers.tf` and TEMPORARILY alter the helm provider's kubernetes block to look like this.
+
+```terraform
+  kubernetes {
+    config_path = "./mappia-aks-config"
+  }
+```
+
+To fetch the mappia aks config run:
+
+```sh
+terraform output -json kube_config_raw | jq -r > mappia-aks-config
 ```
