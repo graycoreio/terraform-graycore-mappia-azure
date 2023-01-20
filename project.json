@@ -1,0 +1,19 @@
+{
+  "name": "terraform-azure",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/terraform/azure",
+  "projectType": "application",
+  "targets": {
+    "lint": {
+      "dependsOn": [
+        {
+          "target": "build",
+          "projects": "dependencies"
+        }
+      ],
+      "executor": "./dist/tools/executors/terraform:lint"
+    }
+  },
+  "tags": [],
+  "implicitDependencies": ["terraform-executor"]
+}

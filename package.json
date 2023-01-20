@@ -1,0 +1,12 @@
+{
+  "name": "@mappia/terraform-azure",
+  "version": "0.0.1",
+  "description": "Terraform chart to deploy mappia on azure from scratch",
+  "keywords": [
+    "Terraform",
+    "Azure",
+    "AKS"
+  ],
+  "author": "Mateus D Dadalto",
+  "license": "SEE LICENSE IN LICENSE"
+}
