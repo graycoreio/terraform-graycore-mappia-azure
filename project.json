@@ -11,7 +11,12 @@
           "projects": "dependencies"
         }
       ],
-      "executor": "./dist/tools/executors/terraform:lint"
+      "executor": "./dist/tools/executors/terraform:lint",
+      "options": {
+        "file":"main.tf",
+        "targetPath": "..\\/mappia",
+        "moduleSource": "app.terraform.io\\/graycore\\/mappia\\/graycore"
+      }
     }
   },
   "tags": [],
