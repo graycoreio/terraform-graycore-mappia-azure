@@ -94,7 +94,7 @@ output "full_qualified_domain_name" {
 }
 
 output "kube_config_raw" {
-  value     = module.mappia-azure.kube_config_raw
+  value     = module.my-terraform-project.kube_config_raw
   sensitive = true
 }
 ```
