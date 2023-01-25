@@ -93,6 +93,10 @@ output "full_qualified_domain_name" {
   value = module.my-terraform-project.full_qualified_domain_name
 }
 
+output "aks_name" {
+  value = module.my-terraform-project.aks_name
+}
+
 output "kube_config_raw" {
   value     = module.my-terraform-project.kube_config_raw
   sensitive = true
@@ -181,7 +185,8 @@ terraform apply
 Once this has completed, you now have a working Mappia cluster on Azure. You can access the Kubernetes, by running the following commands:
 
 ```bash
-az aks get-credentials --resource-group $RESOURCE_GROUP --name mappia-aks
+AKS_NAME=$(terraform output -raw aks_name)
+az aks get-credentials --resource-group $RESOURCE_GROUP --name $AKS_NAME
 kubectl get pods
 helm get notes mappia
 ```

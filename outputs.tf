@@ -6,6 +6,10 @@ output "full_qualified_domain_name" {
   value = azurerm_public_ip.mappia_ip.fqdn
 }
 
+output "aks_name" {
+  value = azurerm_kubernetes_cluster.mappia_aks.name
+}
+
 output "kube_config_host" {
   value     = data.azurerm_kubernetes_cluster.mappia_aks.kube_config.0.host
   sensitive = true
