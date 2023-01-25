@@ -236,3 +236,7 @@ To fetch the mappia aks config run:
 ```sh
 terraform output -json kube_config_raw | jq -r > mappia-aks-config
 ```
+
+## Provider produced inconsistent result after apply
+
+This is a somewhat rare error that we saw happening when destroying a previous terraform installation and then trying to re-install it. Azure might take some time to actually delete its resources so the recommended here is to destroy and wait a few minutes before applying again
