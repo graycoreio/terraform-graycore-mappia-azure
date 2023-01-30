@@ -2,7 +2,7 @@
 module "my-terraform-project" {
   source = "../../.."
 
-  resource_group_name = "demoResourceGroup"
+  resource_group_name = var.mappia_resource_group
   location            = "eastus2"
   sp_id               = var.mappia_sp_id
   sp_object_id        = var.mappia_sp_object_id
@@ -14,6 +14,11 @@ module "my-terraform-project" {
 }
 
 # Variables
+variable "mappia_resource_group" {
+  type        = string
+  description = "Resource group"
+}
+
 variable "mappia_sp_id" {
   type        = string
   description = "Service principal client Id"
