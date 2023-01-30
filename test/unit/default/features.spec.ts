@@ -1,4 +1,4 @@
-import { getResourceChangeByAddress, terraformPlanAsJson, Action, ResourceChange, TerraformPlan, changeDependency, terraformInit, changeBack } from "@mappia/terraform-to-js";
+import { Action, getResourceChangeByAddress, ResourceChange, setupTerraformTest, TerraformPlan } from "@mappia/terraform-to-js";
 
 describe("The default terraform project plan", () => {
   let terraformPlan: TerraformPlan;
@@ -6,10 +6,10 @@ describe("The default terraform project plan", () => {
   jest.setTimeout(60000);
 
   beforeAll(async () => {
-    await changeDependency(__dirname + '/../../../main.tf', 'app.terraform.io\\/graycore\\/mappia\\/graycore', "..\\/mappia");
-    await terraformInit(__dirname);
-    terraformPlan = await terraformPlanAsJson(__dirname);
-    await changeBack(__dirname + '/../../../main.tf', 'app.terraform.io\\/graycore\\/mappia\\/graycore', "..\\/mappia");
+    terraformPlan = await setupTerraformTest(__dirname,
+      __dirname + '/../../../main.tf',
+      'app.terraform.io\\/graycore\\/mappia\\/graycore',
+      "..\\/mappia");
   })
 
   it('should contain planned outputs', async () => {
