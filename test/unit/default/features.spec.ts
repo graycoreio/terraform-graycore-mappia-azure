@@ -94,7 +94,7 @@ describe("The default terraform project plan", () => {
       expect(aks).toBeDefined();
       expect(aks?.change.actions).toEqual([Action.CREATE]);
       expect(aks?.change.actions).toEqual([Action.CREATE]);
-      expect(aks?.change.after?.resource_group_name).toBe('demoResourceGroup');
+      expect(aks?.change.after?.resource_group_name).toBe('mappia-ci');
       expect(aks?.change.after?.location).toEqual('eastus2');
     });
 
@@ -135,7 +135,7 @@ describe("The default terraform project plan", () => {
     it('should contain the public ip creation plan', () => {
       expect(publicIp).toBeDefined();
       expect(publicIp?.change.actions).toEqual([Action.CREATE]);
-      expect(publicIp?.change.after?.resource_group_name).toBe('demoResourceGroup');
+      expect(publicIp?.change.after?.resource_group_name).toBe('mappia-ci');
     });
 
     it('should create a static public ip', () => {
@@ -177,7 +177,7 @@ describe("The default terraform project plan", () => {
       expect(ingressChart?.change.after?.set).toContainEqual({
         name: "controller.service.annotations.service\\.beta\\.kubernetes\\.io/azure-load-balancer-resource-group",
         type: "string",
-        value: "demoResourceGroup"
+        value: "mappia-ci"
       });
     });
   });
