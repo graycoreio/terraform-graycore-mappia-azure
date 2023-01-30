@@ -29,7 +29,7 @@ describe("The default terraform project plan", () => {
   });
 
   describe('keyvault configurations', () => {
-    let keyvault: ResourceChange|undefined;
+    let keyvault: ResourceChange | undefined;
 
     beforeAll(() => {
       keyvault = getResourceChangeByAddress(terraformPlan, "module.my-terraform-project.azurerm_key_vault.mappia-kv");
@@ -74,7 +74,7 @@ describe("The default terraform project plan", () => {
   });
 
   describe('aks configurations', () => {
-    let aks: ResourceChange|undefined;
+    let aks: ResourceChange | undefined;
 
     beforeAll(() => {
       aks = getResourceChangeByAddress(terraformPlan, "module.my-terraform-project.azurerm_kubernetes_cluster.mappia_aks");
@@ -126,7 +126,7 @@ describe("The default terraform project plan", () => {
   });
 
   describe('aks configurations', () => {
-    let publicIp: ResourceChange|undefined;
+    let publicIp: ResourceChange | undefined;
 
     beforeAll(() => {
       publicIp = getResourceChangeByAddress(terraformPlan, "module.my-terraform-project.azurerm_public_ip.mappia_ip");
@@ -158,7 +158,7 @@ describe("The default terraform project plan", () => {
   });
 
   describe('Helm chart for ingress', () => {
-    let ingressChart: ResourceChange|undefined;
+    let ingressChart: ResourceChange | undefined;
 
     beforeAll(() => {
       ingressChart = getResourceChangeByAddress(terraformPlan, "module.my-terraform-project.helm_release.ingress");
@@ -183,7 +183,7 @@ describe("The default terraform project plan", () => {
   });
 
   describe('Helm chart for akvaks', () => {
-    let akvaksChart: ResourceChange|undefined;
+    let akvaksChart: ResourceChange | undefined;
 
     beforeAll(() => {
       akvaksChart = getResourceChangeByAddress(terraformPlan, "module.my-terraform-project.helm_release.mappia_kv_to_aks");
@@ -199,8 +199,8 @@ describe("The default terraform project plan", () => {
     });
   });
 
-  describe('Mappia infrastructure',  () => {
-    let mappiaChart: ResourceChange|undefined;
+  describe('Mappia infrastructure', () => {
+    let mappiaChart: ResourceChange | undefined;
 
     beforeAll(() => {
       mappiaChart = getResourceChangeByAddress(terraformPlan, "module.my-terraform-project.module.mappia.helm_release.mappia");
