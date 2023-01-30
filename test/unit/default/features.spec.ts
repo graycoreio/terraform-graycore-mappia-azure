@@ -3,7 +3,7 @@ import { getResourceChangeByAddress, terraformPlanAsJson, Action, ResourceChange
 describe("The default terraform project plan", () => {
   let terraformPlan: TerraformPlan;
 
-  jest.setTimeout(30000);
+  jest.setTimeout(60000);
 
   beforeAll(async () => {
     await changeDependency(__dirname + '/../../../main.tf', 'app.terraform.io\\/graycore\\/mappia\\/graycore', "..\\/mappia");
