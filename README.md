@@ -240,3 +240,28 @@ terraform output -json kube_config_raw | jq -r > mappia-aks-config
 ## Provider produced inconsistent result after apply
 
 This is a somewhat rare error that we saw happening when destroying a previous terraform installation and then trying to re-install it. Azure might take some time to actually delete its resources so the recommended here is to destroy and wait a few minutes before applying again
+
+## Could not download chart
+
+```sh
+module.my-terraform-project.module.mappia.helm_release.mappia: Creating...
+╷
+│ Error: could not download chart: failed to download "oci://mappia.azurecr.io/helm/mappia"
+│ 
+│   with module.my-terraform-project.module.mappia.helm_release.mappia,
+│   on .terraform/mappia/main.tf line 2, in resource "helm_release" "mappia":
+│    2: resource "helm_release" "mappia" {
+│ 
+╵
+```
+
+The following error message might be caused by wrong access level permissions for your mappia token. Try reaching mappia support to fix that. In the meantime you can set the `helm_mappia_chart_version` in your module declaration:
+
+```terraform
+module "my-terraform-project" {
+  source  = "app.terraform.io/graycore/mappia-azure/graycore"
+  version = "0.0.5"
+
+  helm_mappia_chart_version = "0.2.0"
+}
+```
