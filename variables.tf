@@ -1,113 +1,6 @@
-variable "resource_group_name" {
-  type        = string
-  description = "Resource Group Name"
-  default     = "mappia"
-}
-
-variable "location" {
-  type        = string
-  description = "Location to create the resources. If unset, resource group location will be used"
-  default     = ""
-}
-
-variable "sp_id" {
-  type        = string
-  description = "Service principal client Id"
-}
-
-variable "sp_object_id" {
-  type        = string
-  description = "Service principal object Id"
-}
-
-variable "sp_secret" {
-  type        = string
-  description = "Service principal client secret"
-}
-
-variable "subscription_id" {
-  type        = string
-  description = "Azure subscription id"
-}
-
-variable "sp_tenant_id" {
-  type        = string
-  description = "Service principal tenant id"
-}
-
-variable "helm_user" {
-  type        = string
-  description = "Mappia's helm registry user"
-  sensitive   = true
-}
-
-variable "helm_pwd" {
-  type        = string
-  description = "Mappia's helm registry password"
-  sensitive   = true
-}
-
-variable "helm_release_name" {
-  type        = string
-  description = "Mappia chart release name"
-  default     = "mappia"
-}
-
-variable "kv_sku_name" {
-  type        = string
-  description = "The Name of the SKU used for this Key Vault. Possible values are 'standard' and 'premium'"
-  default     = "standard"
-}
-
-variable "kv_name" {
-  type        = string
-  description = "[Optional] Keyvault resource name. If left empty a random name will be chosen"
-  default     = ""
-}
-
-variable "encryption_key" {
-  type        = string
-  description = "Magento encryption key"
-  sensitive   = true
-  default     = ""
-}
-
-variable "shared_cache_pwd" {
-  type        = string
-  description = "Magento shared cache password"
-  sensitive   = true
-  default     = ""
-}
-
-variable "secrets" {
-  type        = map(string)
-  description = "Map of secrets that will be maitained by terraform e.g {\"my-secret\" = \"my-secret-value\" }"
-  sensitive   = true
-  default     = {}
-}
-
-
 variable "aks_name" {
   type        = string
   description = "Azure kubernetes system (AKS) resource name"
-  default     = ""
-}
-
-variable "kubernetes_version" {
-  type        = string
-  description = "AKS kubernetes version"
-  default     = "1.23"
-}
-
-variable "dns_prefix" {
-  type        = string
-  description = "DNS prefix specified when creating the managed cluster"
-  default     = ""
-}
-
-variable "oms_log_analytics_workspace_id" {
-  type        = string
-  description = "The ID of the Log Analytics Workspace which the OMS Agent should send data to."
   default     = ""
 }
 
@@ -132,6 +25,25 @@ variable "default_node_pool" {
   }
 }
 
+variable "dns_prefix" {
+  type        = string
+  description = "DNS prefix specified when creating the managed cluster"
+  default     = ""
+}
+
+variable "domain_name_label" {
+  type        = string
+  description = "Label for the Domain Name. Will be used to make up the FQDN. Random value will be used if this is not provided"
+  default     = ""
+}
+
+variable "encryption_key" {
+  type        = string
+  description = "Magento encryption key"
+  sensitive   = true
+  default     = ""
+}
+
 variable "extra_node_pools" {
   type = list(object({
     max_count         = number
@@ -147,22 +59,10 @@ variable "extra_node_pools" {
   default = []
 }
 
-variable "public_ip_name" {
+variable "helm_akvaks_values" {
   type        = string
-  description = "Public Ip resource name"
-  default     = "mappia-public-ip"
-}
-
-variable "domain_name_label" {
-  type        = string
-  description = "Label for the Domain Name. Will be used to make up the FQDN. Random value will be used if this is not provided"
-  default     = ""
-}
-
-variable "public_ip_zones" {
-  type        = list(string)
-  description = "Public Ip zones"
-  default     = []
+  description = "AKV to AKS chart extra configuration file path"
+  default     = "no-file"
 }
 
 variable "helm_ingress_name" {
@@ -183,16 +83,16 @@ variable "helm_ingress_values" {
   default     = "no-file"
 }
 
+variable "helm_mappia_chart_version" {
+  type        = string
+  description = "Mappia chart version, latest will apply by default"
+  default     = ""
+}
+
 variable "helm_mappia_name" {
   type        = string
   description = "Mappia chart name"
   default     = "mappia"
-}
-
-variable "helm_mappia_values" {
-  type        = string
-  description = "Mappia chart extra configuration file path"
-  default     = "no-file"
 }
 
 variable "helm_mappia_set_values" {
@@ -209,14 +109,113 @@ variable "helm_mappia_use_default_config" {
   default     = true
 }
 
-variable "helm_mappia_chart_version" {
+variable "helm_mappia_values" {
   type        = string
-  description = "Mappia chart version, latest will apply by default"
+  description = "Mappia chart extra configuration file path"
+  default     = "no-file"
+}
+
+variable "helm_pwd" {
+  type        = string
+  description = "Mappia's helm registry password"
+  sensitive   = true
+}
+
+variable "helm_release_name" {
+  type        = string
+  description = "Mappia chart release name"
+  default     = "mappia"
+}
+
+variable "helm_user" {
+  type        = string
+  description = "Mappia's helm registry user"
+  sensitive   = true
+}
+
+variable "kubernetes_version" {
+  type        = string
+  description = "AKS kubernetes version"
+  default     = "1.23"
+}
+
+variable "kv_name" {
+  type        = string
+  description = "[Optional] Keyvault resource name. If left empty a random name will be chosen"
   default     = ""
 }
 
-variable "helm_akvaks_values" {
+variable "kv_sku_name" {
   type        = string
-  description = "AKV to AKS chart extra configuration file path"
-  default     = "no-file"
+  description = "The Name of the SKU used for this Key Vault. Possible values are 'standard' and 'premium'"
+  default     = "standard"
+}
+
+variable "location" {
+  type        = string
+  description = "Location to create the resources. If unset, resource group location will be used"
+  default     = ""
+}
+
+variable "oms_log_analytics_workspace_id" {
+  type        = string
+  description = "The ID of the Log Analytics Workspace which the OMS Agent should send data to."
+  default     = ""
+}
+
+variable "public_ip_name" {
+  type        = string
+  description = "Public Ip resource name"
+  default     = "mappia-public-ip"
+}
+
+variable "public_ip_zones" {
+  type        = list(string)
+  description = "Public Ip zones"
+  default     = []
+}
+
+variable "resource_group_name" {
+  type        = string
+  description = "Resource Group Name"
+  default     = "mappia"
+}
+
+variable "secrets" {
+  type        = map(string)
+  description = "Map of secrets that will be maitained by terraform e.g {\"my-secret\" = \"my-secret-value\" }"
+  sensitive   = true
+  default     = {}
+}
+
+variable "shared_cache_pwd" {
+  type        = string
+  description = "Magento shared cache password"
+  sensitive   = true
+  default     = ""
+}
+
+variable "sp_id" {
+  type        = string
+  description = "Service principal client Id"
+}
+
+variable "sp_object_id" {
+  type        = string
+  description = "Service principal object Id"
+}
+
+variable "sp_secret" {
+  type        = string
+  description = "Service principal client secret"
+}
+
+variable "sp_tenant_id" {
+  type        = string
+  description = "Service principal tenant id"
+}
+
+variable "subscription_id" {
+  type        = string
+  description = "Azure subscription id"
 }
