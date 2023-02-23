@@ -59,6 +59,12 @@ variable "extra_node_pools" {
   default = []
 }
 
+variable "helm_akvaks_chart_version" {
+  type        = string
+  description = "Akvaks chart version, latest will apply by default"
+  default     = "0.2.1-alpha.2" # x-release-please-version
+}
+
 variable "helm_akvaks_values" {
   type        = string
   description = "AKV to AKS chart extra configuration file path"
@@ -86,7 +92,7 @@ variable "helm_ingress_values" {
 variable "helm_mappia_chart_version" {
   type        = string
   description = "Mappia chart version, latest will apply by default"
-  default     = ""
+  default     = "0.2.1-alpha.2" # x-release-please-version
 }
 
 variable "helm_mappia_name" {
@@ -101,6 +107,12 @@ variable "helm_mappia_set_values" {
   default = {
     "installer.enabled" = true
   }
+}
+
+variable "helm_mappia_tf_version" {
+  type        = string
+  description = "Mappia terraform module version"
+  default     = "0.2.1-alpha.2" # x-release-please-version
 }
 
 variable "helm_mappia_use_default_config" {

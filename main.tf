@@ -6,7 +6,7 @@ resource "helm_release" "mappia_kv_to_aks" {
   name             = "mappia-kv-to-aks"
   repository       = "oci://mappia.azurecr.io/helm"
   chart            = "akvaks"
-  version          = "0.0.1"
+  version          = var.helm_akvaks_chart_version
   namespace        = "default"
   create_namespace = true
   wait             = true
@@ -61,7 +61,7 @@ resource "helm_release" "ingress" {
 
 module "mappia" {
   source  = "app.terraform.io/graycore/mappia/graycore"
-  version = "~> 0.2.0"
+  version = var.helm_mappia_tf_version
   depends_on = [
     helm_release.ingress
   ]
