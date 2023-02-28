@@ -109,12 +109,6 @@ variable "helm_mappia_set_values" {
   }
 }
 
-variable "helm_mappia_tf_version" {
-  type        = string
-  description = "Mappia terraform module version"
-  default     = "0.2.1-alpha.3" # x-release-please-version
-}
-
 variable "helm_mappia_use_default_config" {
   type        = bool
   description = "Use pre-defined ingress/magento host configurations for mappia chart"
