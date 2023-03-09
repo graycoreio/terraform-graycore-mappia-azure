@@ -103,10 +103,8 @@ variable "helm_mappia_name" {
 
 variable "helm_mappia_set_values" {
   type        = map(string)
-  description = "Dict of custom values to be used as --set in helm command. These values will override the default set when keys collide"
-  default = {
-    "installer.enabled" = true
-  }
+  description = "Dict of custom values to be used as --set in helm command. E.g {\"installer.enabled\" = false }. These values will override the default set when keys collide"
+  default     = {}
 }
 
 variable "helm_mappia_use_default_config" {
