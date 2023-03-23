@@ -253,4 +253,34 @@ describe("The default terraform project plan", () => {
       expect(stdStorageClass?.change.after?.storage_provisioner).toBe('file.csi.azure.com');
     });
   })
+
+  describe('Azure virtual network', () => {
+    let virtualNetwork: ResourceChange | undefined;
+
+    beforeAll(() => {
+      virtualNetwork = getResourceChangeByAddress(terraformPlan, "module.my-terraform-project.azurerm_virtual_network.mappia_vn");
+    });
+
+    it('should contain the virtual network creation plan with default address_space', () => {
+      expect(virtualNetwork).toBeDefined();
+      expect(virtualNetwork?.change.actions).toEqual([Action.CREATE]);
+      expect(virtualNetwork?.change.after?.resource_group_name).toBe('mappia-ci');
+      expect(virtualNetwork?.change.after?.location).toEqual('eastus2');
+      expect(virtualNetwork?.change.after?.address_space).toEqual(['10.224.0.0/12'])
+    });
+  });
+
+  describe('AKS Subnet', () => {
+    let aksSubnet: ResourceChange | undefined;
+    
+    it('should contain the subnet creation plan with default values', () => {
+      aksSubnet = getResourceChangeByAddress(terraformPlan, "module.my-terraform-project.azurerm_subnet.aks_subnet[0]");
+
+      expect(aksSubnet).toBeDefined();
+      expect(aksSubnet?.change.actions).toEqual([Action.CREATE]);
+      expect(aksSubnet?.change.after?.resource_group_name).toBe('mappia-ci');
+      expect(aksSubnet?.change.after?.name).toEqual('aks-subnet');
+      expect(aksSubnet?.change.after?.address_prefixes).toEqual(['10.224.0.0/16']);
+    });
+  });
 });

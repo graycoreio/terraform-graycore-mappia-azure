@@ -11,6 +11,15 @@ locals {
   random_dns_prefix = one(random_pet.dns_prefix[*].id)
 }
 
+resource "azurerm_subnet" "aks_subnet" {
+  count = var.create_aks_subnet ? 1 : 0
+
+  address_prefixes     = var.aks_subnet_address_space
+  name                 = var.aks_subnet_name
+  resource_group_name  = data.azurerm_resource_group.mappia_rg.name
+  virtual_network_name = azurerm_virtual_network.mappia_vn.name
+}
+
 resource "azurerm_kubernetes_cluster" "mappia_aks" {
   name                = coalesce(var.aks_name, local.random_aks_name)
   location            = local.location
@@ -34,6 +43,13 @@ resource "azurerm_kubernetes_cluster" "mappia_aks" {
     type = "SystemAssigned"
   }
 
+  network_profile {
+    network_plugin     = var.aks_network_profile.network_plugin
+    service_cidr       = var.aks_network_profile.service_cidr
+    dns_service_ip     = var.aks_network_profile.dns_service_ip
+    docker_bridge_cidr = var.aks_network_profile.docker_bridge_cidr
+  }
+
   # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/kubernetes_cluster#default_node_pool
   default_node_pool {
     name                = var.default_node_pool.name
@@ -42,6 +58,7 @@ resource "azurerm_kubernetes_cluster" "mappia_aks" {
     max_count           = var.default_node_pool.max_count
     min_count           = var.default_node_pool.min_count
     zones               = var.default_node_pool.zones
+    vnet_subnet_id      = var.create_aks_subnet ? azurerm_subnet.aks_subnet[0].id : null
 
     dynamic "linux_os_config" {
       for_each = var.default_node_pool.set_max_map_count ? ["this"] : []
@@ -65,6 +82,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "mappia_aks_extra_nodes" {
   max_count             = var.extra_node_pools[count.index].max_count
   min_count             = var.extra_node_pools[count.index].min_count
   zones                 = var.extra_node_pools[count.index].zones
+  vnet_subnet_id        = var.create_aks_subnet ? azurerm_subnet.aks_subnet[0].id : null
 
   dynamic "linux_os_config" {
     for_each = var.extra_node_pools[count.index].set_max_map_count ? ["this"] : []

@@ -1,7 +1,49 @@
+variable "address_space" {
+  type        = list(string)
+  description = "Virtual network adress space"
+  default     = ["10.224.0.0/12"] # 10.224.0.0 - 10.239.255.255
+}
+
 variable "aks_name" {
   type        = string
   description = "Azure kubernetes system (AKS) resource name"
   default     = ""
+}
+
+variable "aks_subnet_address_space" {
+  type        = list(string)
+  description = "Virtual network adress space"
+  default     = ["10.224.0.0/16"] # 10.224.0.0 - 10.224.255.255
+}
+
+variable "aks_subnet_name" {
+  type        = string
+  description = "AKS subnet name"
+  default     = "aks-subnet"
+}
+
+variable "aks_network_profile" {
+  type = object({
+    network_plugin     = string
+    service_cidr       = string
+    dns_service_ip     = string
+    docker_bridge_cidr = string
+  })
+
+  description = "AKS network profile, check terraform documentation https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/kubernetes_cluster#network_profile for each of the fields meaning"
+
+  default = {
+    dns_service_ip     = "10.0.0.10"
+    docker_bridge_cidr = "172.17.0.1/16"
+    network_plugin     = "kubenet"
+    service_cidr       = "10.0.0.0/16" # 172.16.0.0 -> 172.16.255.255
+  }
+}
+
+variable "create_aks_subnet" {
+  type        = bool
+  description = "Create and link aks-subnet to aks. If you are using mappia for a pre-existing cluster you might want to keep the auto-generated subnet. In that case mark this as false"
+  default     = true
 }
 
 variable "default_node_pool" {
@@ -222,4 +264,10 @@ variable "sp_tenant_id" {
 variable "subscription_id" {
   type        = string
   description = "Azure subscription id"
+}
+
+variable "virtual_network_name" {
+  type        = string
+  description = "Virtual network resource name. If not specified a random name will be generated"
+  default     = ""
 }
