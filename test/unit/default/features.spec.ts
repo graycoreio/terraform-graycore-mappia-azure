@@ -283,4 +283,43 @@ describe("The default terraform project plan", () => {
       expect(aksSubnet?.change.after?.address_prefixes).toEqual(['10.224.0.0/16']);
     });
   });
+
+  describe('AKS Storage Classes', () => {
+    let writablePremiumLoose: ResourceChange | undefined;
+    let writablePremium: ResourceChange | undefined;
+    let writable: ResourceChange | undefined;
+    
+    it('should contain the storageClass writable creation plan', () => {
+      writable = getResourceChangeByAddress(terraformPlan, "module.my-terraform-project.kubernetes_storage_class.mappia_writable");
+
+      expect(writable).toBeDefined();
+      expect(writable?.change.actions).toEqual([Action.CREATE]);
+      expect(writable?.change.after?.metadata[0].name).toBe("azurefile-csi-web-writable");
+      expect(writable?.change.after?.mount_options).toContain("cache=strict");
+      expect(writable?.change.after?.parameters?.skuName).toBe("Standard_LRS");
+      expect(writable?.change.after?.storage_provisioner).toBe("file.csi.azure.com");
+    });
+
+    it('should contain the storageClass writable premium creation plan', () => {
+      writablePremium = getResourceChangeByAddress(terraformPlan, "module.my-terraform-project.kubernetes_storage_class.mappia_writable_premium");
+
+      expect(writablePremium).toBeDefined();
+      expect(writablePremium?.change.actions).toEqual([Action.CREATE]);
+      expect(writablePremium?.change.after?.metadata[0].name).toBe("azurefile-premium-csi-web-writable");
+      expect(writablePremium?.change.after?.mount_options).toContain("cache=strict");
+      expect(writablePremium?.change.after?.storage_provisioner).toBe("file.csi.azure.com");
+      expect(writablePremium?.change.after?.parameters?.skuName).toBe("Premium_LRS");
+    });
+
+    it('should contain the storageClass writable premium loose creation plan', () => {
+      writablePremiumLoose = getResourceChangeByAddress(terraformPlan, "module.my-terraform-project.kubernetes_storage_class.mappia_writable_premium_loose");
+
+      expect(writablePremiumLoose).toBeDefined();
+      expect(writablePremiumLoose?.change.actions).toEqual([Action.CREATE]);
+      expect(writablePremiumLoose?.change.after?.metadata[0].name).toBe("azurefile-premium-csi-web-writable-loose");
+      expect(writablePremiumLoose?.change.after?.mount_options).toContain("cache=loose");
+      expect(writablePremiumLoose?.change.after?.storage_provisioner).toBe("file.csi.azure.com");
+      expect(writablePremiumLoose?.change.after?.parameters?.skuName).toBe("Premium_LRS");      
+    });
+  });
 });

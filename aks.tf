@@ -160,6 +160,30 @@ resource "kubernetes_storage_class" "mappia_writable_premium" {
   }
 }
 
+resource "kubernetes_storage_class" "mappia_writable_premium_loose" {
+  depends_on = [
+    azurerm_kubernetes_cluster.mappia_aks
+  ]
+
+  metadata {
+    name = "azurefile-premium-csi-web-writable-loose"
+  }
+  storage_provisioner = "file.csi.azure.com"
+  volume_binding_mode = "Immediate"
+  mount_options = [
+    "dir_mode=0777",
+    "file_mode=0777",
+    "gid=82",
+    "uid=82",
+    "mfsymlinks",
+    "cache=loose",
+    "nosharesock",
+  ]
+  parameters = {
+    skuName = "Premium_LRS"
+  }
+}
+
 resource "random_pet" "domain_name" {
   count = var.domain_name_label == "" ? 1 : 0
 }
