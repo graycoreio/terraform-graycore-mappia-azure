@@ -322,4 +322,30 @@ describe("The default terraform project plan", () => {
       expect(writablePremiumLoose?.change.after?.parameters?.skuName).toBe("Premium_LRS");      
     });
   });
+
+  describe('Mappia module', () => {
+    let mappiaModule: ResourceChange | undefined;
+    
+    beforeAll(() => {
+      mappiaModule = getResourceChangeByAddress(terraformPlan, "module.my-terraform-project.module.mappia.helm_release.mappia");
+    });
+
+    it('should contain the mappia module creation plan', () => {
+      expect(mappiaModule).toBeDefined();
+      expect(mappiaModule?.change.actions).toEqual([Action.CREATE]);
+    });
+
+    it('should contain the mappia module set attributes', () => {
+      expect(mappiaModule?.change.after?.set).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({"name": "admin.ingress.hosts[0].host"}),
+          expect.objectContaining({"name": "admin.ingress.hosts[0].paths"}),
+          expect.objectContaining({"name": "api.ingress.hosts[0].host"}),
+          expect.objectContaining({"name": "frontend.ingress.hosts[0].host"}),
+          expect.objectContaining({"name": "magento.adminUrl"}),
+          expect.objectContaining({"name": "magento.baseUrl"})
+        ])
+      );
+    });
+  });
 });
