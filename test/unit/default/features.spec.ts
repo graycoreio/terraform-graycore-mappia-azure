@@ -112,8 +112,8 @@ describe("The default terraform project plan", () => {
       expect(aks?.change.after_unknown?.dns_prefix).toBe(true);
     });
 
-    it('should create aks with kubernetes version 1.23', async () => {
-      expect(aks?.change.after?.kubernetes_version).toBe('1.23');
+    it('should create aks with kubernetes version 1.25', async () => {
+      expect(aks?.change.after?.kubernetes_version).toBe('1.25');
     });
 
     it('should create aks with system assigned identity', async () => {
