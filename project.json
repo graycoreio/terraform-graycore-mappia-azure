@@ -15,7 +15,7 @@
       "options": {
         "file":"main.tf",
         "targetPath": "..\\/mappia",
-        "moduleSource": "graycoreio\\/mappia\\/graycore"
+        "moduleSource": "app\\.terraform\\.io\\/graycore\\/mappia\\/graycore"
       }
     },
     "test": {
