@@ -241,6 +241,13 @@ variable "shared_cache_pwd" {
   default     = ""
 }
 
+variable "rabbitmq_pwd" {
+  type        = string
+  description = "The password used the `magento` user that connects to RabbitMQ"
+  sensitive   = true
+  default     = ""
+}
+
 variable "sp_id" {
   type        = string
   description = "Service principal client Id"
