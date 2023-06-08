@@ -14,6 +14,9 @@ describe("The default terraform project plan", () => {
 
   it('should contain planned outputs', async () => {
     expect(terraformPlan.planned_values.outputs).toBeDefined();
+    expect(terraformPlan.planned_values.outputs['acr_admin_pwd']).toBeDefined();
+    expect(terraformPlan.planned_values.outputs['acr_admin_user']).toBeDefined();
+    expect(terraformPlan.planned_values.outputs['acr_name']).toBeDefined();
     expect(terraformPlan.planned_values.outputs['ip_address']).toBeDefined();
     expect(terraformPlan.planned_values.outputs['full_qualified_domain_name']).toBeDefined();
     expect(terraformPlan.planned_values.outputs['aks_name']).toBeDefined();
@@ -348,4 +351,33 @@ describe("The default terraform project plan", () => {
       );
     });
   });
+  describe("Acr Configurations", () => {
+    let acr: ResourceChange | undefined;
+
+    beforeAll(() => {
+      acr = getResourceChangeByAddress(terraformPlan, "module.my-terraform-project.azurerm_container_registry.mappia_acr[0]");
+    });
+
+    it('should contain the acr creation plan', async () => {
+      expect(acr).toBeDefined();
+      expect(acr?.change.actions).toEqual([Action.CREATE]);
+      expect(acr?.change.after?.resource_group_name).toBe('mappia-ci');
+      expect(acr?.change.after?.location).toEqual('eastus2');
+    });
+
+    it('should create acr with Standard sku', async () => {
+      expect(acr?.change.after?.sku).toBe('Standard');
+    });
+
+    it('should create acr with random name', async () => {
+      expect(acr?.change.after_unknown?.name).toBe(true);
+    });
+
+    it('should create role assignment to connect acr with aks', async () => {
+      const roleAssignment = getResourceChangeByAddress(terraformPlan, "module.my-terraform-project.azurerm_role_assignment.mappia_acr_to_aks[0]");
+
+      expect(roleAssignment).toBeDefined();
+      expect(roleAssignment?.change.after?.role_definition_name).toBe("AcrPull");
+    });
+  })
 });

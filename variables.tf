@@ -4,6 +4,30 @@ variable "address_space" {
   default     = ["10.224.0.0/12"] # 10.224.0.0 - 10.239.255.255
 }
 
+variable "acr_admin_enabled" {
+  type        = bool
+  description = "Specifies whether the admin user is enabled"
+  default     = true
+}
+
+variable "acr_name" {
+  type        = string
+  description = "Azure container registry name, if empty a random name will be used"
+  default     = ""
+}
+
+variable "acr_sku" {
+  type        = string
+  description = "The SKU name of the container registry. Possible values are Basic, Standard and Premium"
+  default     = "Standard"
+}
+
+variable "acr_enabled" {
+  type        = bool
+  description = "value"
+  default     = true
+}
+
 variable "aks_name" {
   type        = string
   description = "Azure kubernetes system (AKS) resource name"

@@ -55,6 +55,20 @@ variable "mappia_helm_pwd" {
 }
 
 # Outputs
+output "acr_admin_pwd" {
+  value     = module.my-terraform-project.acr_admin_pwd
+  sensitive = true
+}
+
+output "acr_admin_user" {
+  value     = module.my-terraform-project.acr_admin_user
+  sensitive = true
+}
+
+output "acr_name" {
+  value = module.my-terraform-project.acr_name
+}
+
 output "ip_address" {
   value = module.my-terraform-project.ip_address
 }
