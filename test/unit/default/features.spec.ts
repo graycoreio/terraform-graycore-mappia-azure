@@ -105,8 +105,8 @@ describe("The default terraform project plan", () => {
       expect(aks?.change.after?.default_node_pool[0].linux_os_config[0].sysctl_config[0].vm_max_map_count).toBe(262144);
       expect(aks?.change.after?.default_node_pool[0].name).toBe('agentpool');
       expect(aks?.change.after?.default_node_pool[0].vm_size).toBe('Standard_B2s');
-      expect(aks?.change.after?.default_node_pool[0].min_count).toBe(4);
-      expect(aks?.change.after?.default_node_pool[0].max_count).toBe(5);
+      expect(aks?.change.after?.default_node_pool[0].min_count).toBe(8);
+      expect(aks?.change.after?.default_node_pool[0].max_count).toBe(10);
       expect(aks?.change.after?.default_node_pool[0].zones).toBeNull();
     });
 
