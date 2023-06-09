@@ -67,8 +67,8 @@ resource "helm_release" "ingress" {
 }
 
 module "mappia" {
-  source = "../mappia"
-  # version = "0.3.5" # x-release-please-version
+  source  = "app.terraform.io/graycore/mappia/graycore"
+  version = "0.3.5" # x-release-please-version
   depends_on = [
     helm_release.ingress
   ]
