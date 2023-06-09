@@ -11,6 +11,8 @@ secretProvider:
   - data:
     - key: RABBITMQ_USERNAME
       objectName: magento-rabbitmq-username
+    - key: rabbitmq-password
+      objectName: magento-rabbitmq-password
     - key: RABBITMQ_PASSWORD
       objectName: magento-rabbitmq-password
     secretName: magento-rabbitmq-secret
