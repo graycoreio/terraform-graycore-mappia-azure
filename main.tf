@@ -50,6 +50,13 @@ resource "helm_release" "ingress" {
     name  = "controller.service.loadBalancerIP"
     value = azurerm_public_ip.mappia_ip.ip_address
   }
+
+  set {
+    type  = "string"
+    name  = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/azure-load-balancer-health-probe-request-path"
+    value = "/healthz"
+  }
+
   set {
     value = data.azurerm_resource_group.mappia_rg.name
     name  = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/azure-load-balancer-resource-group"
