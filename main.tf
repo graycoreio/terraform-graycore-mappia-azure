@@ -67,7 +67,7 @@ resource "helm_release" "ingress" {
 }
 
 module "mappia" {
-  source  = "graycore/mappia/graycore"
+  source  = "graycoreio/mappia/graycore"
   version = "0.3.7-alpha.0" # x-release-please-version
   depends_on = [
     helm_release.ingress

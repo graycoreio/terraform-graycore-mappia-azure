@@ -15,7 +15,7 @@
       "options": {
         "file":"main.tf",
         "targetPath": "..\\/mappia",
-        "moduleSource": "graycore\\/mappia\\/graycore"
+        "moduleSource": "graycoreio\\/mappia\\/graycore"
       }
     },
     "test": {

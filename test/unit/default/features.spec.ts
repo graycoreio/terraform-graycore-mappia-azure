@@ -8,7 +8,7 @@ describe("The default terraform project plan", () => {
   beforeAll(async () => {
     terraformPlan = await setupTerraformTest(__dirname,
       __dirname + '/../../../main.tf',
-      'graycore\\/mappia\\/graycore',
+      'graycoreio\\/mappia\\/graycore',
       "..\\/mappia");
   })
 
