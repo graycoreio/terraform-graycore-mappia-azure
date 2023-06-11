@@ -59,6 +59,7 @@ resource "azurerm_kubernetes_cluster" "mappia_aks" {
     min_count           = var.default_node_pool.min_count
     zones               = var.default_node_pool.zones
     vnet_subnet_id      = var.create_aks_subnet ? azurerm_subnet.aks_subnet[0].id : null
+    temporary_name_for_rotation = "temppool"
 
     dynamic "linux_os_config" {
       for_each = var.default_node_pool.set_max_map_count ? ["this"] : []
