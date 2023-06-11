@@ -84,6 +84,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "mappia_aks_extra_nodes" {
   min_count             = var.extra_node_pools[count.index].min_count
   zones                 = var.extra_node_pools[count.index].zones
   vnet_subnet_id        = var.create_aks_subnet ? azurerm_subnet.aks_subnet[0].id : null
+  node_taints           = var.extra_node_pools[count.index].node_taint
 
   dynamic "linux_os_config" {
     for_each = var.extra_node_pools[count.index].set_max_map_count ? ["this"] : []

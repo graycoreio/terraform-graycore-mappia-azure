@@ -118,6 +118,7 @@ variable "extra_node_pools" {
     name              = string
     set_max_map_count = bool
     zones             = optional(list(string))
+    node_taint        = optional(list(string))
   }))
 
   description = "AKS extra node pool configuration"
