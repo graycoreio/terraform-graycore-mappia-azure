@@ -52,13 +52,13 @@ resource "azurerm_kubernetes_cluster" "mappia_aks" {
 
   # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/kubernetes_cluster#default_node_pool
   default_node_pool {
-    name                = var.default_node_pool.name
-    vm_size             = var.default_node_pool.vm_size
-    enable_auto_scaling = true
-    max_count           = var.default_node_pool.max_count
-    min_count           = var.default_node_pool.min_count
-    zones               = var.default_node_pool.zones
-    vnet_subnet_id      = var.create_aks_subnet ? azurerm_subnet.aks_subnet[0].id : null
+    name                        = var.default_node_pool.name
+    vm_size                     = var.default_node_pool.vm_size
+    enable_auto_scaling         = true
+    max_count                   = var.default_node_pool.max_count
+    min_count                   = var.default_node_pool.min_count
+    zones                       = var.default_node_pool.zones
+    vnet_subnet_id              = var.create_aks_subnet ? azurerm_subnet.aks_subnet[0].id : null
     temporary_name_for_rotation = "temppool"
 
     dynamic "linux_os_config" {
