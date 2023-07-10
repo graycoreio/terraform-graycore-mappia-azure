@@ -52,6 +52,12 @@ resource "helm_release" "ingress" {
   }
 
   set {
+    type = "string"
+    name = "controller.service.externalTrafficPolicy"
+    value = "Local"
+  }
+
+  set {
     type  = "string"
     name  = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/azure-load-balancer-health-probe-request-path"
     value = "/healthz"
