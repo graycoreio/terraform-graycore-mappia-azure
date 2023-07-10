@@ -52,8 +52,8 @@ resource "helm_release" "ingress" {
   }
 
   set {
-    type = "string"
-    name = "controller.service.externalTrafficPolicy"
+    type  = "string"
+    name  = "controller.service.externalTrafficPolicy"
     value = "Local"
   }
 
