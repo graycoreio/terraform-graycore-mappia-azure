@@ -8,12 +8,12 @@
       "dependsOn": [
         {
           "target": "build",
-          "projects": "dependencies"
+          "dependencies": true
         }
       ],
       "executor": "./dist/tools/executors/terraform:lint",
       "options": {
-        "file":"main.tf",
+        "file": "main.tf",
         "targetPath": "..\\/mappia",
         "moduleSource": "graycoreio\\/mappia\\/graycore"
       }
