@@ -11,7 +11,7 @@
           "dependencies": true
         }
       ],
-      "executor": "./dist/tools/executors/terraform:lint",
+      "executor": "@mappia/terraform-executor:lint",
       "options": {
         "file": "main.tf",
         "targetPath": "..\\/mappia",
@@ -26,6 +26,5 @@
       }
     }
   },
-  "tags": [],
-  "implicitDependencies": ["terraform-executor"]
+  "tags": []
 }
