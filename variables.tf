@@ -266,6 +266,13 @@ variable "shared_cache_pwd" {
   default     = ""
 }
 
+variable "graphql_id_salt" {
+  type        = string
+  description = "Magento GraphQl Cache ID Salt. https://developer.adobe.com/commerce/webapi/graphql/usage/caching/#caching-for-logged-in-customers. It should be 32 characters long. See https://github.com/magento/magento2/blob/2.4.7-p2/lib/internal/Magento/Framework/Config/ConfigOptionsListConstants.php#L168"
+  sensitive   = true
+  default     = ""
+}
+
 variable "rabbitmq_pwd" {
   type        = string
   description = "The password used the `magento` user that connects to RabbitMQ"

@@ -21,6 +21,12 @@ resource "random_password" "rabbitmq_pwd" {
   special = false
 }
 
+resource "random_password" "graphql_id_salt" {
+  count   = var.graphql_id_salt == "" ? 1 : 0
+  length  = 32
+  special = false
+}
+
 # Key-Vault
 resource "azurerm_key_vault" "mappia-kv" {
   name                = coalesce(var.kv_name, local.random_kv_name)
@@ -80,6 +86,16 @@ resource "azurerm_key_vault_secret" "magento_shared_cache_pwd" {
   ]
 }
 
+resource "azurerm_key_vault_secret" "graphql_id_salt" {
+  key_vault_id = azurerm_key_vault.mappia-kv.id
+  name         = "graphql-id-salt"
+  value        = coalesce(var.graphql_id_salt, local.random_graphql_id_salt)
+
+  depends_on = [
+    azurerm_key_vault_access_policy.sp-access-policy
+  ]
+}
+
 resource "azurerm_key_vault_secret" "magento_rabbitmq_password" {
   key_vault_id = azurerm_key_vault.mappia-kv.id
   name         = "magento-rabbitmq-password"
@@ -101,8 +117,9 @@ resource "azurerm_key_vault_secret" "magento_rabbitmq_username" {
 }
 
 locals {
-  random_encryption_key   = one(random_password.mage_encryption_key[*].result)
-  random_rabbitmq_pwd     = one(random_password.rabbitmq_pwd[*].result)
-  random_shared_cache_pwd = one(random_password.shared_cache_pwd[*].result)
-  random_kv_name          = one(random_pet.kv_name[*].id)
+  random_encryption_key     = one(random_password.mage_encryption_key[*].result)
+  random_rabbitmq_pwd       = one(random_password.rabbitmq_pwd[*].result)
+  random_shared_cache_pwd   = one(random_password.shared_cache_pwd[*].result)
+  random_kv_name            = one(random_pet.kv_name[*].id)
+  random_graphql_id_salt    = one(random_password.graphql_id_salt[*].id)
 }
