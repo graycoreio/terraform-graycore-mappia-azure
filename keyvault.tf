@@ -121,5 +121,5 @@ locals {
   random_rabbitmq_pwd     = one(random_password.rabbitmq_pwd[*].result)
   random_shared_cache_pwd = one(random_password.shared_cache_pwd[*].result)
   random_kv_name          = one(random_pet.kv_name[*].id)
-  random_graphql_id_salt  = one(random_password.graphql_id_salt[*].id)
+  random_graphql_id_salt  = one(random_password.graphql_id_salt[*].result)
 }
