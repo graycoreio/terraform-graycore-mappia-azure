@@ -117,9 +117,9 @@ resource "azurerm_key_vault_secret" "magento_rabbitmq_username" {
 }
 
 locals {
-  random_encryption_key     = one(random_password.mage_encryption_key[*].result)
-  random_rabbitmq_pwd       = one(random_password.rabbitmq_pwd[*].result)
-  random_shared_cache_pwd   = one(random_password.shared_cache_pwd[*].result)
-  random_kv_name            = one(random_pet.kv_name[*].id)
-  random_graphql_id_salt    = one(random_password.graphql_id_salt[*].id)
+  random_encryption_key   = one(random_password.mage_encryption_key[*].result)
+  random_rabbitmq_pwd     = one(random_password.rabbitmq_pwd[*].result)
+  random_shared_cache_pwd = one(random_password.shared_cache_pwd[*].result)
+  random_kv_name          = one(random_pet.kv_name[*].id)
+  random_graphql_id_salt  = one(random_password.graphql_id_salt[*].id)
 }
