@@ -31,7 +31,8 @@ resource "azurerm_kubernetes_cluster" "mappia_aks" {
   dynamic "oms_agent" {
     for_each = var.oms_log_analytics_workspace_id != "" ? ["this"] : []
     content {
-      log_analytics_workspace_id = var.oms_log_analytics_workspace_id
+      log_analytics_workspace_id      = var.oms_log_analytics_workspace_id
+      msi_auth_for_monitoring_enabled = true
     }
   }
 
