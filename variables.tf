@@ -129,7 +129,7 @@ variable "extra_node_pools" {
 variable "helm_akvaks_chart_version" {
   type        = string
   description = "Akvaks chart version, latest will apply by default"
-  default     = "0.3.8" # x-release-please-version
+  default     = "0.3.9" # x-release-please-version
 }
 
 variable "helm_akvaks_values" {
@@ -159,7 +159,7 @@ variable "helm_ingress_values" {
 variable "helm_mappia_chart_version" {
   type        = string
   description = "Mappia chart version, latest will apply by default"
-  default     = "0.3.8" # x-release-please-version
+  default     = "0.3.9" # x-release-please-version
 }
 
 variable "helm_mappia_name" {
