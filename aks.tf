@@ -45,17 +45,16 @@ resource "azurerm_kubernetes_cluster" "mappia_aks" {
   }
 
   network_profile {
-    network_plugin     = var.aks_network_profile.network_plugin
-    service_cidr       = var.aks_network_profile.service_cidr
-    dns_service_ip     = var.aks_network_profile.dns_service_ip
-    docker_bridge_cidr = var.aks_network_profile.docker_bridge_cidr
+    network_plugin = var.aks_network_profile.network_plugin
+    service_cidr   = var.aks_network_profile.service_cidr
+    dns_service_ip = var.aks_network_profile.dns_service_ip
   }
 
   # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/kubernetes_cluster#default_node_pool
   default_node_pool {
     name                        = var.default_node_pool.name
     vm_size                     = var.default_node_pool.vm_size
-    enable_auto_scaling         = true
+    auto_scaling_enabled        = true
     max_count                   = var.default_node_pool.max_count
     min_count                   = var.default_node_pool.min_count
     zones                       = var.default_node_pool.zones
@@ -80,7 +79,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "mappia_aks_extra_nodes" {
   name                  = var.extra_node_pools[count.index].name
   kubernetes_cluster_id = azurerm_kubernetes_cluster.mappia_aks.id
   vm_size               = var.extra_node_pools[count.index].vm_size
-  enable_auto_scaling   = true
+  auto_scaling_enabled  = true
   max_count             = var.extra_node_pools[count.index].max_count
   min_count             = var.extra_node_pools[count.index].min_count
   zones                 = var.extra_node_pools[count.index].zones

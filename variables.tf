@@ -48,19 +48,17 @@ variable "aks_subnet_name" {
 
 variable "aks_network_profile" {
   type = object({
-    network_plugin     = string
-    service_cidr       = string
-    dns_service_ip     = string
-    docker_bridge_cidr = string
+    network_plugin = string
+    service_cidr   = string
+    dns_service_ip = string
   })
 
   description = "AKS network profile, check terraform documentation https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/kubernetes_cluster#network_profile for each of the fields meaning"
 
   default = {
-    dns_service_ip     = "10.0.0.10"
-    docker_bridge_cidr = "172.17.0.1/16"
-    network_plugin     = "kubenet"
-    service_cidr       = "10.0.0.0/16" # 172.16.0.0 -> 172.16.255.255
+    dns_service_ip = "10.0.0.10"
+    network_plugin = "kubenet"
+    service_cidr   = "10.0.0.0/16" # 172.16.0.0 -> 172.16.255.255
   }
 }
 
