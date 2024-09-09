@@ -74,7 +74,7 @@ resource "helm_release" "ingress" {
 
 module "mappia" {
   source = "../mappia"
-  # version = "0.4.0" # x-release-please-version
+  # version = "0.4.1" # x-release-please-version
   depends_on = [
     helm_release.ingress
   ]
