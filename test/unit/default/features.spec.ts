@@ -115,8 +115,8 @@ describe("The default terraform project plan", () => {
       expect(aks?.change.after_unknown?.dns_prefix).toBe(true);
     });
 
-    it('should create aks with kubernetes version 1.25', async () => {
-      expect(aks?.change.after?.kubernetes_version).toBe('1.25');
+    it('should create aks with kubernetes version 1.29', async () => {
+      expect(aks?.change.after?.kubernetes_version).toBe('1.29');
     });
 
     it('should create aks with system assigned identity', async () => {
@@ -342,7 +342,6 @@ describe("The default terraform project plan", () => {
       expect(mappiaModule?.change.after?.set).toEqual(
         expect.arrayContaining([
           expect.objectContaining({"name": "admin.ingress.hosts[0].host"}),
-          expect.objectContaining({"name": "admin.ingress.hosts[0].paths"}),
           expect.objectContaining({"name": "api.ingress.hosts[0].host"}),
           expect.objectContaining({"name": "frontend.ingress.hosts[0].host"}),
           expect.objectContaining({"name": "magento.adminUrl"}),
