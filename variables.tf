@@ -205,7 +205,7 @@ variable "helm_user" {
 variable "kubernetes_version" {
   type        = string
   description = "AKS kubernetes version"
-  default     = "1.25"
+  default     = "1.29"
 }
 
 variable "kv_name" {
