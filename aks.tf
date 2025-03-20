@@ -61,6 +61,12 @@ resource "azurerm_kubernetes_cluster" "mappia_aks" {
     vnet_subnet_id              = var.create_aks_subnet ? azurerm_subnet.aks_subnet[0].id : null
     temporary_name_for_rotation = "temppool"
 
+    upgrade_settings {
+      drain_timeout_in_minutes      = 0
+      max_surge                     = "10%"
+      node_soak_duration_in_minutes = 0
+    }
+
     dynamic "linux_os_config" {
       for_each = var.default_node_pool.set_max_map_count ? ["this"] : []
       content {
