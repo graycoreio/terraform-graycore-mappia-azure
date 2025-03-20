@@ -39,6 +39,7 @@ resource "helm_release" "ingress" {
   chart            = "ingress-nginx"
   namespace        = var.helm_ingress_namespace
   create_namespace = true
+  timeout          = 60
 
   depends_on = [
     azurerm_kubernetes_cluster.mappia_aks,
