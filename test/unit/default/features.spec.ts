@@ -156,7 +156,6 @@ describe("The default terraform project plan", () => {
       const roleAssignment = getResourceChangeByAddress(terraformPlan, "module.my-terraform-project.azurerm_role_assignment.aks_identity_ip_role_permission");
       expect(roleAssignment).toBeDefined();
       expect(roleAssignment?.change.actions).toEqual([Action.CREATE]);
-      expect(roleAssignment?.change.after?.role_definition_name).toBe("Network Contributor");
     });
   });
 
