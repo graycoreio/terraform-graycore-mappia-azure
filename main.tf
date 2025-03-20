@@ -42,7 +42,8 @@ resource "helm_release" "ingress" {
 
   depends_on = [
     azurerm_kubernetes_cluster.mappia_aks,
-    azurerm_role_assignment.aks_identity_ip_role_permission
+    azurerm_role_assignment.aks_identity_ip_role_permission,
+    azurerm_role_assignment.aks_identity_rg_ip_role_permission
   ]
 
   set {

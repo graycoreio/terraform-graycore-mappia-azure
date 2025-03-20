@@ -108,11 +108,54 @@ resource "azurerm_public_ip" "mappia_ip" {
   zones               = var.public_ip_zones
 }
 
+resource "azurerm_role_definition" "mappia_networking" {
+  name        = "Mappia AKS Ingress IP Address Reader"
+  scope       = data.azurerm_resource_group.mappia_rg.id
+  description = "This role allows the AKS Managed Identity to access and read IP addresses."
+
+  permissions {
+    actions = [
+      "Microsoft.Network/publicIPAddresses/read",
+    ]
+  }
+
+  assignable_scopes = [
+    data.azurerm_resource_group.mappia_rg.id
+  ]
+}
+
+resource "azurerm_role_definition" "mappia_networking_ip_join" {
+  name        = "Mappia AKS Ingress IP Address Joiner"
+  scope       = azurerm_public_ip.mappia_ip.id
+  description = "This role allows the AKS Managed Identity to access and read IP addresses."
+
+  permissions {
+    actions = [
+      "Microsoft.Network/publicIPAddresses/join/action"
+    ]
+  }
+
+  assignable_scopes = [
+    azurerm_public_ip.mappia_ip.id
+  ]
+}
+
+resource "azurerm_role_assignment" "aks_identity_rg_ip_role_permission" {
+  scope              = data.azurerm_resource_group.mappia_rg.id
+  role_definition_id = azurerm_role_definition.mappia_networking.role_definition_resource_id
+  principal_id       = azurerm_kubernetes_cluster.mappia_aks.identity[0].principal_id
+  depends_on = [
+    azurerm_role_definition.mappia_networking
+  ]
+}
 
 resource "azurerm_role_assignment" "aks_identity_ip_role_permission" {
-  scope                = azurerm_public_ip.mappia_ip.id
-  role_definition_name = "Network Contributor"
-  principal_id         = azurerm_kubernetes_cluster.mappia_aks.identity[0].principal_id
+  scope              = azurerm_public_ip.mappia_ip.id
+  role_definition_id = azurerm_role_definition.mappia_networking_ip_join.role_definition_resource_id
+  principal_id       = azurerm_kubernetes_cluster.mappia_aks.identity[0].principal_id
+  depends_on = [
+    azurerm_role_definition.mappia_networking_ip_join
+  ]
 }
 
 resource "kubernetes_storage_class" "mappia_writable" {
