@@ -40,6 +40,7 @@ resource "helm_release" "ingress" {
   namespace        = var.helm_ingress_namespace
   create_namespace = true
   timeout          = 60
+  version          = "4.12.0"
 
   depends_on = [
     azurerm_kubernetes_cluster.mappia_aks,
