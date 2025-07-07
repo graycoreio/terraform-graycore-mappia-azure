@@ -19,18 +19,20 @@ resource "helm_release" "mappia_kv_to_aks" {
     azurerm_kubernetes_cluster.mappia_aks
   ]
 
-  set {
-    name  = "keyvaultName"
-    value = azurerm_key_vault.mappia-kv.name
-  }
-  set {
-    name  = "tenantId"
-    value = var.sp_tenant_id
-  }
-  set {
-    name  = "secretProvider.userAssignedIdentityID"
-    value = azurerm_kubernetes_cluster.mappia_aks.key_vault_secrets_provider[0].secret_identity[0].client_id
-  }
+  set = [
+    {
+      name  = "keyvaultName"
+      value = azurerm_key_vault.mappia-kv.name
+    },
+    {
+      name  = "tenantId"
+      value = var.sp_tenant_id
+    },
+    {
+      name  = "secretProvider.userAssignedIdentityID"
+      value = azurerm_kubernetes_cluster.mappia_aks.key_vault_secrets_provider[0].secret_identity[0].client_id
+    }
+  ]
 }
 
 resource "helm_release" "ingress" {
@@ -48,29 +50,28 @@ resource "helm_release" "ingress" {
     azurerm_role_assignment.aks_identity_rg_ip_role_permission
   ]
 
-  set {
-    type  = "string"
-    name  = "controller.service.loadBalancerIP"
-    value = azurerm_public_ip.mappia_ip.ip_address
-  }
-
-  set {
-    type  = "string"
-    name  = "controller.service.externalTrafficPolicy"
-    value = "Local"
-  }
-
-  set {
-    type  = "string"
-    name  = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/azure-load-balancer-health-probe-request-path"
-    value = "/healthz"
-  }
-
-  set {
-    value = data.azurerm_resource_group.mappia_rg.name
-    name  = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/azure-load-balancer-resource-group"
-    type  = "string"
-  }
+  set = [
+    {
+      type  = "string"
+      name  = "controller.service.loadBalancerIP"
+      value = azurerm_public_ip.mappia_ip.ip_address,
+    },
+    {
+      type  = "string"
+      name  = "controller.service.externalTrafficPolicy"
+      value = "Local"
+    },
+    {
+      type  = "string"
+      name  = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/azure-load-balancer-health-probe-request-path"
+      value = "/healthz"
+    },
+    {
+      value = data.azurerm_resource_group.mappia_rg.name
+      name  = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/azure-load-balancer-resource-group"
+      type  = "string"
+    }
+  ]
 
   values = fileexists(var.helm_ingress_values) ? ["${file(var.helm_ingress_values)}"] : []
 }

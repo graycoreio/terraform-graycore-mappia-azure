@@ -13,13 +13,15 @@ provider "azurerm" {
 }
 
 provider "helm" {
-  registry {
-    url      = "oci://mappia.azurecr.io"
-    password = var.helm_pwd
-    username = var.helm_user
-  }
+  registries = [
+    {
+      url      = "oci://mappia.azurecr.io"
+      password = var.helm_pwd
+      username = var.helm_user
+    }
+  ]
 
-  kubernetes {
+  kubernetes = {
     host = azurerm_kubernetes_cluster.mappia_aks.kube_config.0.host
 
     client_certificate     = base64decode(azurerm_kubernetes_cluster.mappia_aks.kube_config.0.client_certificate)
