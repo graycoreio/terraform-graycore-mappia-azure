@@ -1,4 +1,4 @@
-import { Action, getResourceChangeByAddress, ResourceChange, setupTerraformTest, TerraformPlan } from "@mappia/terraform-to-js";
+import { Action, getResourceChangeByAddress, ResourceChange, setupTerraformTest, setupTerraformTestV2, TerraformPlan } from "@mappia/terraform-to-js";
 
 describe("The default terraform project plan", () => {
   let terraformPlan: TerraformPlan;
@@ -6,11 +6,42 @@ describe("The default terraform project plan", () => {
   jest.setTimeout(60000);
 
   beforeAll(async () => {
-    terraformPlan = await setupTerraformTest(__dirname,
-      __dirname + '/../../../main.tf',
-      'graycoreio\\/mappia\\/graycore',
-      "..\\/mappia");
-  })
+    terraformPlan = await setupTerraformTestV2(__dirname, [{
+      note: 'Adjust primary package',
+      file: __dirname + '/../../../main.tf',
+      adjustments: [
+        {
+          target: "module.mappia",
+          key: "source",
+          from: "graycoreio/mappia/graycore",
+          to: "../mappia"
+        },
+        {
+          target: "module.mappia",
+          key: "version",
+          from: "*",
+          to: undefined
+        },
+        {
+          target: "resource.helm_release.mappia_kv_to_aks",
+          key: "chart",
+          from: "akvaks",
+          to: '../../../../../../packages/akvaks'
+        },
+        {
+          target: "resource.helm_release.mappia_kv_to_aks",
+          key: "repository",
+          from: "*",
+          to: undefined
+        },
+        {
+          target: "resource.helm_release.mappia_kv_to_aks",
+          key: "version",
+          from: "*",
+          to: undefined
+        },
+      ],
+    }])})
 
   it('should contain planned outputs', async () => {
     expect(terraformPlan.planned_values.outputs).toBeDefined();
@@ -195,9 +226,8 @@ describe("The default terraform project plan", () => {
       expect(akvaksChart).toBeDefined();
       expect(akvaksChart?.change.actions).toEqual([Action.CREATE]);
       expect(akvaksChart?.change.after?.name).toBe('mappia-kv-to-aks');
-      expect(akvaksChart?.change.after?.chart).toBe('akvaks');
       expect(akvaksChart?.change.after?.namespace).toBe('default');
-      expect(akvaksChart?.change.after?.repository).toBe('oci://mappia.azurecr.io/helm');
+      expect(akvaksChart?.change.after?.chart).toContain('akvaks');
     });
   });
 
@@ -214,7 +244,6 @@ describe("The default terraform project plan", () => {
       expect(mappiaChart?.change.after?.name).toBe('mappia');
       expect(mappiaChart?.change.after?.chart).toBe('mappia');
       expect(mappiaChart?.change.after?.namespace).toBe('default');
-      expect(mappiaChart?.change.after?.repository).toBe('oci://mappia.azurecr.io/helm');
     });
 
     it('should contain the standard storage class creation plan', () => {
