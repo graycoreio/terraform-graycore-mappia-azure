@@ -6,42 +6,68 @@ describe("The default terraform project plan", () => {
   jest.setTimeout(60000);
 
   beforeAll(async () => {
-    terraformPlan = await setupTerraformTestV2(__dirname, [{
-      note: 'Adjust primary package',
-      file: __dirname + '/../../../main.tf',
-      adjustments: [
-        {
-          target: "module.mappia",
-          key: "source",
-          from: "graycoreio/mappia/graycore",
-          to: "../mappia"
-        },
-        {
-          target: "module.mappia",
-          key: "version",
-          from: "*",
-          to: undefined
-        },
-        {
-          target: "resource.helm_release.mappia_kv_to_aks",
-          key: "chart",
-          from: "akvaks",
-          to: '../../../../../../packages/akvaks'
-        },
-        {
-          target: "resource.helm_release.mappia_kv_to_aks",
-          key: "repository",
-          from: "*",
-          to: undefined
-        },
-        {
-          target: "resource.helm_release.mappia_kv_to_aks",
-          key: "version",
-          from: "*",
-          to: undefined
-        },
-      ],
-    }])})
+    terraformPlan = await setupTerraformTestV2(__dirname, [
+      {
+        note: 'Adjust primary package',
+        file: __dirname + '/../../../main.tf',
+        adjustments: [
+          {
+            target: "module.mappia",
+            key: "source",
+            from: "graycoreio/mappia/graycore",
+            to: "../mappia"
+          },
+          {
+            target: "module.mappia",
+            key: "version",
+            from: "*",
+            to: undefined
+          },
+          {
+            target: "resource.helm_release.mappia_kv_to_aks",
+            key: "chart",
+            from: "akvaks",
+            to: '../../../../../../packages/akvaks'
+          },
+          {
+            target: "resource.helm_release.mappia_kv_to_aks",
+            key: "repository",
+            from: "*",
+            to: undefined
+          },
+          {
+            target: "resource.helm_release.mappia_kv_to_aks",
+            key: "version",
+            from: "*",
+            to: undefined
+          },
+        ],
+      },
+      {
+        note: 'Adjust secondary mappia package',
+        file: __dirname + '/../../../../mappia/main.tf',
+        adjustments: [
+          {
+            target: "resource.helm_release.mappia",
+            key: "chart",
+            from: "mappia",
+            to: '../../../../../../packages/chart'
+          },
+          {
+            target: "resource.helm_release.mappia",
+            key: "repository",
+            from: "*",
+            to: undefined
+          },
+          {
+            target: "resource.helm_release.mappia",
+            key: "version",
+            from: "*",
+            to: undefined
+          },
+        ]
+      }
+  ])})
 
   it('should contain planned outputs', async () => {
     expect(terraformPlan.planned_values.outputs).toBeDefined();
@@ -242,7 +268,7 @@ describe("The default terraform project plan", () => {
       expect(mappiaChart).toBeDefined()
       expect(mappiaChart?.change.actions).toEqual([Action.CREATE]);
       expect(mappiaChart?.change.after?.name).toBe('mappia');
-      expect(mappiaChart?.change.after?.chart).toBe('mappia');
+      expect(mappiaChart?.change.after?.chart === 'mappia' || mappiaChart?.change.after?.chart === '../../../../../../packages/chart').toEqual(true)
       expect(mappiaChart?.change.after?.namespace).toBe('default');
     });
 
