@@ -3,6 +3,7 @@
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/terraform/azure",
   "projectType": "application",
+  "tags": [],
   "targets": {
     "lint": {
       "dependsOn": [
@@ -25,6 +26,5 @@
         "jestConfig": "packages/terraform/azure/jest.config.ts"
       }
     }
-  },
-  "tags": []
+  }
 }
