@@ -101,35 +101,35 @@ describe("The default terraform project plan", () => {
     })
 
     it('should be a keyvault with a random name', async () => {
-      expect(keyvault?.change.after_unknown?.name).toBe(true);
+      expect((keyvault?.change.after_unknown as any)?.name).toBe(true);
     });
 
     it('should contain an access policy creation plan for aks with Get permission', async () => {
       const aksPolicy = getResourceChangeByAddress(terraformPlan, 'module.my-terraform-project.azurerm_key_vault_access_policy.aks-access-policy');
       expect(aksPolicy).toBeDefined();
       expect(aksPolicy?.change.actions).toEqual([Action.CREATE]);
-      expect(aksPolicy?.change.after?.secret_permissions).toEqual(['Get']);
+      expect((aksPolicy?.change.after as any)?.secret_permissions).toEqual(['Get']);
     });
 
     it('should contain an access policy creation plan for the service principal with multiple permissions', async () => {
       const spPolicy = getResourceChangeByAddress(terraformPlan, 'module.my-terraform-project.azurerm_key_vault_access_policy.sp-access-policy');
       expect(spPolicy).toBeDefined();
       expect(spPolicy?.change.actions).toEqual([Action.CREATE]);
-      expect(spPolicy?.change.after?.secret_permissions).toEqual(['Get', 'Set', 'Delete', 'Purge']);
+      expect((spPolicy?.change.after as any)?.secret_permissions).toEqual(['Get', 'Set', 'Delete', 'Purge']);
     });
 
     it('should contain the magento-encryption-key creation plan', async () => {
       const encryptionKey = getResourceChangeByAddress(terraformPlan, 'module.my-terraform-project.azurerm_key_vault_secret.magento_encryption_key');
       expect(encryptionKey).toBeDefined();
       expect(encryptionKey?.change.actions).toEqual([Action.CREATE]);
-      expect(encryptionKey?.change.after?.name).toBe('magento-encryption-key');
+      expect((encryptionKey?.change.after as any)?.name).toBe('magento-encryption-key');
     });
 
     it('should contain the magento-shared-cache-pwd creation plan', async () => {
       const encryptionKey = getResourceChangeByAddress(terraformPlan, 'module.my-terraform-project.azurerm_key_vault_secret.magento_shared_cache_pwd');
       expect(encryptionKey).toBeDefined();
       expect(encryptionKey?.change.actions).toEqual([Action.CREATE]);
-      expect(encryptionKey?.change.after?.name).toBe('magento-shared-cache-pwd');
+      expect((encryptionKey?.change.after as any)?.name).toBe('magento-shared-cache-pwd');
     });
   });
 
@@ -154,34 +154,34 @@ describe("The default terraform project plan", () => {
       expect(aks).toBeDefined();
       expect(aks?.change.actions).toEqual([Action.CREATE]);
       expect(aks?.change.actions).toEqual([Action.CREATE]);
-      expect(aks?.change.after?.resource_group_name).toBe('mappia-ci');
-      expect(aks?.change.after?.location).toEqual('eastus2');
+      expect((aks?.change.after as any)?.resource_group_name).toBe('mappia-ci');
+      expect((aks?.change.after as any)?.location).toEqual('eastus2');
     });
 
     it('should create aks with default node pool configurations', async () => {
-      expect(aks?.change.after?.default_node_pool[0].linux_os_config[0].sysctl_config[0].vm_max_map_count).toBe(262144);
-      expect(aks?.change.after?.default_node_pool[0].name).toBe('agentpool');
-      expect(aks?.change.after?.default_node_pool[0].vm_size).toBe('Standard_B2s');
-      expect(aks?.change.after?.default_node_pool[0].min_count).toBe(8);
-      expect(aks?.change.after?.default_node_pool[0].max_count).toBe(10);
-      expect(aks?.change.after?.default_node_pool[0].zones).toBeNull();
+      expect((aks?.change.after as any)?.default_node_pool[0].linux_os_config[0].sysctl_config[0].vm_max_map_count).toBe(262144);
+      expect((aks?.change.after as any)?.default_node_pool[0].name).toBe('agentpool');
+      expect((aks?.change.after as any)?.default_node_pool[0].vm_size).toBe('Standard_B2s');
+      expect((aks?.change.after as any)?.default_node_pool[0].min_count).toBe(8);
+      expect((aks?.change.after as any)?.default_node_pool[0].max_count).toBe(10);
+      expect((aks?.change.after as any)?.default_node_pool[0].zones).toBeNull();
     });
 
     it('should create aks with random name and dns prefix', async () => {
-      expect(aks?.change.after_unknown?.name).toBe(true);
-      expect(aks?.change.after_unknown?.dns_prefix).toBe(true);
+      expect((aks?.change.after_unknown as any)?.name).toBe(true);
+      expect((aks?.change.after_unknown as any)?.dns_prefix).toBe(true);
     });
 
     it('should create aks with kubernetes version 1.29', async () => {
-      expect(aks?.change.after?.kubernetes_version).toBe('1.29');
+      expect((aks?.change.after as any)?.kubernetes_version).toBe('1.29');
     });
 
     it('should create aks with system assigned identity', async () => {
-      expect(aks?.change.after?.identity[0].type).toBe('SystemAssigned');
+      expect((aks?.change.after as any)?.identity[0].type).toBe('SystemAssigned');
     });
 
     it('should create aks with keyvault secrets provider', async () => {
-      expect(aks?.change.after_unknown?.key_vault_secrets_provider[0].secret_identity).toBe(true);
+      expect((aks?.change.after_unknown as any)?.key_vault_secrets_provider[0].secret_identity).toBe(true);
     });
   });
 
@@ -195,18 +195,18 @@ describe("The default terraform project plan", () => {
     it('should contain the public ip creation plan', () => {
       expect(publicIp).toBeDefined();
       expect(publicIp?.change.actions).toEqual([Action.CREATE]);
-      expect(publicIp?.change.after?.resource_group_name).toBe('mappia-ci');
+      expect((publicIp?.change.after as any)?.resource_group_name).toBe('mappia-ci');
     });
 
     it('should create a static public ip', () => {
-      expect(publicIp?.change.after?.allocation_method).toBe('Static');
+      expect((publicIp?.change.after as any)?.allocation_method).toBe('Static');
     });
 
     it('should create a random domain_name_label', () => {
       const randomDomain = getResourceChangeByAddress(terraformPlan, "module.my-terraform-project.random_pet.domain_name[0]");
       expect(randomDomain).toBeDefined();
       expect(randomDomain?.change.actions).toEqual([Action.CREATE]);
-      expect(publicIp?.change.after_unknown?.ip_address).toBe(true);
+      expect((publicIp?.change.after_unknown as any)?.ip_address).toBe(true);
     });
 
     it('should create a Network Contributor role assignment for aks in the public ip', () => {
@@ -226,14 +226,14 @@ describe("The default terraform project plan", () => {
     it('should contain the ingress helm chart creation plan', () => {
       expect(ingressChart).toBeDefined();
       expect(ingressChart?.change.actions).toEqual([Action.CREATE]);
-      expect(ingressChart?.change.after?.name).toBe('mappia-nginx');
-      expect(ingressChart?.change.after?.chart).toBe('ingress-nginx');
-      expect(ingressChart?.change.after?.namespace).toBe('ingress-nginx');
-      expect(ingressChart?.change.after?.repository).toBe('https://kubernetes.github.io/ingress-nginx/');
+      expect((ingressChart?.change.after as any)?.name).toBe('mappia-nginx');
+      expect((ingressChart?.change.after as any)?.chart).toBe('ingress-nginx');
+      expect((ingressChart?.change.after as any)?.namespace).toBe('ingress-nginx');
+      expect((ingressChart?.change.after as any)?.repository).toBe('https://kubernetes.github.io/ingress-nginx/');
     });
 
     it('should contain azure specific ingress annotations', () => {
-      expect(ingressChart?.change.after?.set).toContainEqual({
+      expect((ingressChart?.change.after as any)?.set).toContainEqual({
         name: "controller.service.annotations.service\\.beta\\.kubernetes\\.io/azure-load-balancer-resource-group",
         type: "string",
         value: "mappia-ci"
@@ -251,9 +251,9 @@ describe("The default terraform project plan", () => {
     it('should contain the akvaks helm chart creation plan', () => {
       expect(akvaksChart).toBeDefined();
       expect(akvaksChart?.change.actions).toEqual([Action.CREATE]);
-      expect(akvaksChart?.change.after?.name).toBe('mappia-kv-to-aks');
-      expect(akvaksChart?.change.after?.namespace).toBe('default');
-      expect(akvaksChart?.change.after?.chart).toContain('akvaks');
+      expect((akvaksChart?.change.after as any)?.name).toBe('mappia-kv-to-aks');
+      expect((akvaksChart?.change.after as any)?.namespace).toBe('default');
+      expect((akvaksChart?.change.after as any)?.chart).toContain('akvaks');
     });
   });
 
@@ -267,9 +267,9 @@ describe("The default terraform project plan", () => {
     it('should contain the mappia helm chart creation plan', () => {
       expect(mappiaChart).toBeDefined()
       expect(mappiaChart?.change.actions).toEqual([Action.CREATE]);
-      expect(mappiaChart?.change.after?.name).toBe('mappia');
-      expect(mappiaChart?.change.after?.chart === 'mappia' || mappiaChart?.change.after?.chart === '../../../../../../packages/chart').toEqual(true)
-      expect(mappiaChart?.change.after?.namespace).toBe('default');
+      expect((mappiaChart?.change.after as any)?.name).toBe('mappia');
+      expect((mappiaChart?.change.after as any)?.chart === 'mappia' || (mappiaChart?.change.after as any)?.chart === '../../../../../../packages/chart').toEqual(true)
+      expect((mappiaChart?.change.after as any)?.namespace).toBe('default');
     });
 
     it('should contain the standard storage class creation plan', () => {
@@ -277,8 +277,8 @@ describe("The default terraform project plan", () => {
 
       expect(stdStorageClass).toBeDefined();
       expect(stdStorageClass?.change.actions).toEqual([Action.CREATE]);
-      expect(stdStorageClass?.change.after?.metadata[0].name).toBe('azurefile-csi-web-writable');
-      expect(stdStorageClass?.change.after?.mount_options).toEqual([
+      expect((stdStorageClass?.change.after as any)?.metadata[0].name).toBe('azurefile-csi-web-writable');
+      expect((stdStorageClass?.change.after as any)?.mount_options).toEqual([
         'cache=strict',
         'dir_mode=0777',
         'file_mode=0777',
@@ -287,8 +287,8 @@ describe("The default terraform project plan", () => {
         'nosharesock',
         'uid=82'
       ]);
-      expect(stdStorageClass?.change.after?.parameters.skuName).toBe('Standard_LRS');
-      expect(stdStorageClass?.change.after?.storage_provisioner).toBe('file.csi.azure.com');
+      expect((stdStorageClass?.change.after as any)?.parameters.skuName).toBe('Standard_LRS');
+      expect((stdStorageClass?.change.after as any)?.storage_provisioner).toBe('file.csi.azure.com');
     });
 
     it('should contain the premium storage class creation plan', () => {
@@ -296,8 +296,8 @@ describe("The default terraform project plan", () => {
 
       expect(stdStorageClass).toBeDefined();
       expect(stdStorageClass?.change.actions).toEqual([Action.CREATE]);
-      expect(stdStorageClass?.change.after?.metadata[0].name).toBe('azurefile-premium-csi-web-writable');
-      expect(stdStorageClass?.change.after?.mount_options).toEqual([
+      expect((stdStorageClass?.change.after as any)?.metadata[0].name).toBe('azurefile-premium-csi-web-writable');
+      expect((stdStorageClass?.change.after as any)?.mount_options).toEqual([
         'cache=strict',
         'dir_mode=0777',
         'file_mode=0777',
@@ -306,8 +306,8 @@ describe("The default terraform project plan", () => {
         'nosharesock',
         'uid=82'
       ]);
-      expect(stdStorageClass?.change.after?.parameters.skuName).toBe('Premium_LRS');
-      expect(stdStorageClass?.change.after?.storage_provisioner).toBe('file.csi.azure.com');
+      expect((stdStorageClass?.change.after as any)?.parameters.skuName).toBe('Premium_LRS');
+      expect((stdStorageClass?.change.after as any)?.storage_provisioner).toBe('file.csi.azure.com');
     });
   })
 
@@ -321,9 +321,9 @@ describe("The default terraform project plan", () => {
     it('should contain the virtual network creation plan with default address_space', () => {
       expect(virtualNetwork).toBeDefined();
       expect(virtualNetwork?.change.actions).toEqual([Action.CREATE]);
-      expect(virtualNetwork?.change.after?.resource_group_name).toBe('mappia-ci');
-      expect(virtualNetwork?.change.after?.location).toEqual('eastus2');
-      expect(virtualNetwork?.change.after?.address_space).toEqual(['10.224.0.0/12'])
+      expect((virtualNetwork?.change.after as any)?.resource_group_name).toBe('mappia-ci');
+      expect((virtualNetwork?.change.after as any)?.location).toEqual('eastus2');
+      expect((virtualNetwork?.change.after as any)?.address_space).toEqual(['10.224.0.0/12'])
     });
   });
 
@@ -335,9 +335,9 @@ describe("The default terraform project plan", () => {
 
       expect(aksSubnet).toBeDefined();
       expect(aksSubnet?.change.actions).toEqual([Action.CREATE]);
-      expect(aksSubnet?.change.after?.resource_group_name).toBe('mappia-ci');
-      expect(aksSubnet?.change.after?.name).toEqual('aks-subnet');
-      expect(aksSubnet?.change.after?.address_prefixes).toEqual(['10.224.0.0/16']);
+      expect((aksSubnet?.change.after as any)?.resource_group_name).toBe('mappia-ci');
+      expect((aksSubnet?.change.after as any)?.name).toEqual('aks-subnet');
+      expect((aksSubnet?.change.after as any)?.address_prefixes).toEqual(['10.224.0.0/16']);
     });
   });
 
@@ -351,10 +351,10 @@ describe("The default terraform project plan", () => {
 
       expect(writable).toBeDefined();
       expect(writable?.change.actions).toEqual([Action.CREATE]);
-      expect(writable?.change.after?.metadata[0].name).toBe("azurefile-csi-web-writable");
-      expect(writable?.change.after?.mount_options).toContain("cache=strict");
-      expect(writable?.change.after?.parameters?.skuName).toBe("Standard_LRS");
-      expect(writable?.change.after?.storage_provisioner).toBe("file.csi.azure.com");
+      expect((writable?.change.after as any)?.metadata[0].name).toBe("azurefile-csi-web-writable");
+      expect((writable?.change.after as any)?.mount_options).toContain("cache=strict");
+      expect((writable?.change.after as any)?.parameters?.skuName).toBe("Standard_LRS");
+      expect((writable?.change.after as any)?.storage_provisioner).toBe("file.csi.azure.com");
     });
 
     it('should contain the storageClass writable premium creation plan', () => {
@@ -362,10 +362,10 @@ describe("The default terraform project plan", () => {
 
       expect(writablePremium).toBeDefined();
       expect(writablePremium?.change.actions).toEqual([Action.CREATE]);
-      expect(writablePremium?.change.after?.metadata[0].name).toBe("azurefile-premium-csi-web-writable");
-      expect(writablePremium?.change.after?.mount_options).toContain("cache=strict");
-      expect(writablePremium?.change.after?.storage_provisioner).toBe("file.csi.azure.com");
-      expect(writablePremium?.change.after?.parameters?.skuName).toBe("Premium_LRS");
+      expect((writablePremium?.change.after as any)?.metadata[0].name).toBe("azurefile-premium-csi-web-writable");
+      expect((writablePremium?.change.after as any)?.mount_options).toContain("cache=strict");
+      expect((writablePremium?.change.after as any)?.storage_provisioner).toBe("file.csi.azure.com");
+      expect((writablePremium?.change.after as any)?.parameters?.skuName).toBe("Premium_LRS");
     });
 
     it('should contain the storageClass writable premium loose creation plan', () => {
@@ -373,10 +373,10 @@ describe("The default terraform project plan", () => {
 
       expect(writablePremiumLoose).toBeDefined();
       expect(writablePremiumLoose?.change.actions).toEqual([Action.CREATE]);
-      expect(writablePremiumLoose?.change.after?.metadata[0].name).toBe("azurefile-premium-csi-web-writable-loose");
-      expect(writablePremiumLoose?.change.after?.mount_options).toContain("cache=loose");
-      expect(writablePremiumLoose?.change.after?.storage_provisioner).toBe("file.csi.azure.com");
-      expect(writablePremiumLoose?.change.after?.parameters?.skuName).toBe("Premium_LRS");      
+      expect((writablePremiumLoose?.change.after as any)?.metadata[0].name).toBe("azurefile-premium-csi-web-writable-loose");
+      expect((writablePremiumLoose?.change.after as any)?.mount_options).toContain("cache=loose");
+      expect((writablePremiumLoose?.change.after as any)?.storage_provisioner).toBe("file.csi.azure.com");
+      expect((writablePremiumLoose?.change.after as any)?.parameters?.skuName).toBe("Premium_LRS");      
     });
   });
 
@@ -393,7 +393,7 @@ describe("The default terraform project plan", () => {
     });
 
     it('should contain the mappia module set attributes', () => {
-      expect(mappiaModule?.change.after?.set).toEqual(
+      expect((mappiaModule?.change.after as any)?.set).toEqual(
         expect.arrayContaining([
           expect.objectContaining({"name": "admin.ingress.hosts[0].host"}),
           expect.objectContaining({"name": "api.ingress.hosts[0].host"}),
@@ -414,23 +414,23 @@ describe("The default terraform project plan", () => {
     it('should contain the acr creation plan', async () => {
       expect(acr).toBeDefined();
       expect(acr?.change.actions).toEqual([Action.CREATE]);
-      expect(acr?.change.after?.resource_group_name).toBe('mappia-ci');
-      expect(acr?.change.after?.location).toEqual('eastus2');
+      expect((acr?.change.after as any)?.resource_group_name).toBe('mappia-ci');
+      expect((acr?.change.after as any)?.location).toEqual('eastus2');
     });
 
     it('should create acr with Standard sku', async () => {
-      expect(acr?.change.after?.sku).toBe('Standard');
+      expect((acr?.change.after as any)?.sku).toBe('Standard');
     });
 
     it('should create acr with random name', async () => {
-      expect(acr?.change.after_unknown?.name).toBe(true);
+      expect((acr?.change.after_unknown as any)?.name).toBe(true);
     });
 
     it('should create role assignment to connect acr with aks', async () => {
       const roleAssignment = getResourceChangeByAddress(terraformPlan, "module.my-terraform-project.azurerm_role_assignment.mappia_acr_to_aks[0]");
 
       expect(roleAssignment).toBeDefined();
-      expect(roleAssignment?.change.after?.role_definition_name).toBe("AcrPull");
+      expect((roleAssignment?.change.after as any)?.role_definition_name).toBe("AcrPull");
     });
   })
 });
