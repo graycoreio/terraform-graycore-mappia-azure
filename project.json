@@ -6,6 +6,16 @@
   "tags": [],
   "targets": {
     "lint": {
+      "dependsOn": ["lint:ts", "lint:tf"]
+    },
+    "lint:ts": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["packages/terraform/azure/**/*.ts"]
+      }
+    },
+    "lint:tf": {
       "dependsOn": [
         {
           "target": "build",
