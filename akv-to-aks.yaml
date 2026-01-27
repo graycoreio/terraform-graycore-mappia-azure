@@ -17,3 +17,9 @@ secretProvider:
       objectName: magento-rabbitmq-password
     secretName: magento-rabbitmq-secret
     type: Opaque
+  # OpenSearch 2 Secret Data
+  - data:
+    - key: OPENSEARCH_INITIAL_ADMIN_PASSWORD
+      objectName: magento-opensearch2-password
+    secretName: magento-opensearch2-secret
+    type: Opaque

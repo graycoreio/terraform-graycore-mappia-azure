@@ -21,6 +21,16 @@ resource "random_password" "rabbitmq_pwd" {
   special = false
 }
 
+resource "random_password" "opensearch2_pwd" {
+  count       = var.opensearch2_pwd == "" ? 1 : 0
+  length      = 16
+  special     = true
+  min_upper   = 1
+  min_lower   = 1
+  min_numeric = 1
+  min_special = 1
+}
+
 resource "random_password" "graphql_id_salt" {
   count   = var.graphql_id_salt == "" ? 1 : 0
   length  = 32
@@ -116,9 +126,20 @@ resource "azurerm_key_vault_secret" "magento_rabbitmq_username" {
   ]
 }
 
+resource "azurerm_key_vault_secret" "magento_opensearch2_password" {
+  key_vault_id = azurerm_key_vault.mappia-kv.id
+  name         = "magento-opensearch2-password"
+  value        = coalesce(var.opensearch2_pwd, local.random_opensearch2_pwd)
+
+  depends_on = [
+    azurerm_key_vault_access_policy.sp-access-policy
+  ]
+}
+
 locals {
   random_encryption_key   = one(random_password.mage_encryption_key[*].result)
   random_rabbitmq_pwd     = one(random_password.rabbitmq_pwd[*].result)
+  random_opensearch2_pwd  = one(random_password.opensearch2_pwd[*].result)
   random_shared_cache_pwd = one(random_password.shared_cache_pwd[*].result)
   random_kv_name          = one(random_pet.kv_name[*].id)
   random_graphql_id_salt  = one(random_password.graphql_id_salt[*].result)

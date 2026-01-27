@@ -39,3 +39,8 @@ rabbitmq:
   auth:
     username: magento
     existingPasswordSecret: magento-rabbitmq-secret
+
+opensearch2:
+  envFrom:
+    - secretRef:
+        name: magento-opensearch2-secret

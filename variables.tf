@@ -278,6 +278,13 @@ variable "rabbitmq_pwd" {
   default     = ""
 }
 
+variable "opensearch2_pwd" {
+  type        = string
+  description = "The password used by the `opensearch2` user that connects to OpenSearch 2. The password requires a minimum of 8 characters, including at least one uppercase letter, one lowercase letter, one digit, and one special character."
+  sensitive   = true
+  default     = ""
+}
+
 variable "sp_id" {
   type        = string
   description = "Service principal client Id"
